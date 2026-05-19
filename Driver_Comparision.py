@@ -10,7 +10,7 @@ race.load()
 
 fig, ax = plt.subplots(figsize=(8, 5))
 
-for driver in ('HAM', 'SAI', 'VER', 'RUS'):
+for driver in ("VER", "RUS"):
     laps = race.laps.pick_drivers(driver).pick_quicklaps().reset_index()
     style = plotting.get_driver_style(identifier=driver,
                                       style=['color', 'linestyle'],
