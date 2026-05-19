@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import fastf1
 import fastf1.plotting
 
-session = fastf1.get_session(2022, "United States Grand Prix", "R")
+session = fastf1.get_session(2022, "Hungary", "R")
 session.load()
 laps = session.laps
 
