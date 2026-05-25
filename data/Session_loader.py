@@ -1,13 +1,32 @@
 import fastf1
 
-def get_session(year, venue, identifier):
-    session = fastf1.get_session(year, venue, identifier)
+fastf1.Cache.enable_cache("cache")
+
+def load_session(year, gp, session_type):
+    session = fastf1.get_session(
+        year,
+        gp,
+        session_type
+    )
     session.load()
+
     return session
 
-def get_laps(session):
-    return session.laps
+def load_race(year, gp):
+    return load_session(year, gp, "R")
 
-def get_drivers(session):
-    drivers = session.drivers
-    return [session.get_driver(driver)["Abbreviation"] for driver in drivers]
+
+def load_qualifying(year, gp):
+    return load_session(year, gp, "Q")
+
+
+def load_sprint(year, gp):
+    return load_session(year, gp, "S")
+
+
+def get_event_name(session):
+    return session.event["EventName"]
+
+
+def get_track_name(session):
+    return session.event["Location"]
