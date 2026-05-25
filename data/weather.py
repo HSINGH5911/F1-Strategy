@@ -2,7 +2,6 @@ import random
 
 
 def update_weather(current_wetness):
-
     rain_change = random.uniform(-0.05, 0.08)
 
     current_wetness += rain_change
@@ -11,7 +10,6 @@ def update_weather(current_wetness):
 
 
 def tire_weather_multiplier(compound, wetness):
-
     match compound:
 
         case "SOFT":
@@ -30,26 +28,22 @@ def tire_weather_multiplier(compound, wetness):
 
 
 def weather_pace_penalty(wetness):
-
     return wetness * 12
 
 
 def rain_sc_probability(wetness):
-
     return 0.05 + (
         wetness * 0.35
     )
 
 
 def dry_track(wetness):
-
     wetness -= 0.02
 
     return max(wetness, 0)
 
 
 def weather_state(wetness):
-
     if wetness < 0.2:
         return "DRY"
 
