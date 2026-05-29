@@ -15,6 +15,7 @@ class Driver:
         self.fuel_percentage = 100.0
         self.dnf = False
         self.fastest_lap = None
+        self.last_lap_time = None
 
     def pitted(self):
         self.pit_stops += 1
