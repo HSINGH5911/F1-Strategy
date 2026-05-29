@@ -1,6 +1,5 @@
 import random
 
-
 def pace_delta(attacker, defender):
     return defender.last_lap_time - attacker.last_lap_time
 
@@ -9,12 +8,10 @@ def overtake_probability(attacker, defender):
 
     return max(0.01, min(delta * 0.5, 0.9))
 
-
 def drs_bonus(gap):
     if gap <= 1:
         return 0.15
     return 0
-
 
 def overtake_modifier(track):
     return track["overtake_difficulty"]
