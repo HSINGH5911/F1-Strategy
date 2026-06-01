@@ -10,11 +10,11 @@ def tire_wear(driver, track):
     return tire_data['wear_rate'] * track["tire_stress"]
 
 def update_tire_distance(driver, track):
-    driver.distance += track["length_km"]
+    driver.tire_distance += track["length_km"]
 
 def degradation_penalty(driver):
     tire_data = get_tire_data(driver)
-    wear_ratio = (driver.distance / tire_data["max_distance"])
+    wear_ratio = (driver.tire_distance / tire_data["max_distance"])
 
     return wear_ratio * 2
 

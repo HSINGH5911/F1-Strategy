@@ -14,18 +14,18 @@ def choose_compound(driver, track, race_state):
 def estimate_stint_length(compound, track):
     tire = TIRES[compound]
 
-    return tire["max distance"] / track["length_km"]
+    return tire["max_distance"] / track["length_km"]
 
 def estimate_tire_life(driver):
     tire = TIRES[driver.current_compound]
 
-    return tire["max distance"] - driver.tire_distance
+    return tire["max_distance"] - driver.tire_distance
 
 def tire_score(compound, track, race_state):
     tire = TIRES[compound]
     score = 0
 
-    score += tire["pace"]
+    score -= tire["base_pace"]
     score -= tire["wear_rate"] * track["tire_stress"]
 
     return score

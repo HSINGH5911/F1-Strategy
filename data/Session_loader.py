@@ -1,6 +1,11 @@
+from pathlib import Path
+
 import fastf1
 
-fastf1.Cache.enable_cache("cache")
+CACHE_DIR = Path(__file__).resolve().parents[1] / "cache"
+CACHE_DIR.mkdir(exist_ok=True)
+
+fastf1.Cache.enable_cache(str(CACHE_DIR))
 
 def load_session(year, gp, session_type):
     session = fastf1.get_session(

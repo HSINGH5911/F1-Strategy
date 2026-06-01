@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from widgets import standings_table, tire_table, strategy_table
+from ui.widgets import standings_table, tire_table, strategy_table
 
 def print_standings(drivers):
 

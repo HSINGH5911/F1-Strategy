@@ -11,7 +11,7 @@ class Driver:
         self.gap_to_lead = 0.0
         self.current_compound = "MEDIUM"
         self.tire_distance = 0.0
-        self.pit_stops = 1
+        self.pit_stops = 0
         self.fuel_percentage = 100.0
         self.dnf = False
         self.fastest_lap = None

@@ -14,7 +14,8 @@ def drs_bonus(gap):
     return 0
 
 def overtake_modifier(track):
-    return track["overtake_difficulty"]
+    difficulty = track.get("overtake_difficulty", track.get("overtaking_difficulty", 0.5))
+    return max(0.05, 1 - difficulty)
 
 def attempt_overtake(attacker, defender, gap, track):
     chance = overtake_probability(attacker, defender)

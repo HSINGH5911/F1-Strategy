@@ -1,11 +1,11 @@
 from config.Tires import TIRES
 from simulation.lap_time_model import calc_lap_time
-from tire_strategy import choose_compound
+from strategy.tire_strategy import choose_compound
 
 def should_pit(driver, track, race_state):
     tire_data = TIRES[driver.current_compound]
 
-    return driver.tire_distance >= tire_data["max distance"]
+    return driver.tire_distance >= tire_data["max_distance"]
 
 def project_stint_time(driver, track, race_state, laps):
     total = 0
@@ -43,6 +43,6 @@ def safety_car_reaction(driver, track, race_state):
 
     tire_data = TIRES[driver.current_compound]
 
-    wear_ratio = driver.tire_distance / tire_data["max distance"]
+    wear_ratio = driver.tire_distance / tire_data["max_distance"]
 
     return wear_ratio > .5

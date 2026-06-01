@@ -1,4 +1,4 @@
-from lap_data import get_compound_laps
+from data.lap_data import get_compound_laps
 
 def degradation_curve(laps):
     return laps.groupby("TyreLife")["LapTime"].mean()
