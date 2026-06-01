@@ -17,6 +17,9 @@ def calc_lap_time(driver, track, race_state):
     lap_time += driver.fuel_percentage * .03
     lap_time += random.uniform(-.15, .15)
 
+    if race_state.safety_car:
+        lap_time += 40
+
     return lap_time
 
 

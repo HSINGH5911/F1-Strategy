@@ -13,3 +13,5 @@ class RaceState:
         self.race_order = []
 
         self.session_status = "GREEN"
+
+        self.sc_laps_remaining = 0
