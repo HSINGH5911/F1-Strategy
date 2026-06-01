@@ -15,8 +15,8 @@ def change_compound(driver, new_compound):
     driver.tire_distance = 0
     driver.pit_stops += 1
 
-def perform_stop(driver, track, new_compound):
-    driver.race_time += total_pit_loss(driver, track)
+def perform_stop(driver, track, new_compound, race_state):
+    driver.race_time += total_pit_loss(driver, track, race_state)
     change_compound(driver, new_compound)
 
 def pit_error():
