@@ -1,11 +1,9 @@
 from models.driver import Driver
 from models.team import Team
 from models.race_state import RaceState
-
 from config.Tracks import TRACKS
-
 from simulation.race_simulator import simulate_race
-
+from ui.strategy_gui import main as launch_strategy_gui
 from ui.dashboard import (
     print_standings,
     print_tires,
@@ -13,7 +11,6 @@ from ui.dashboard import (
     plot_positions,
     plot_lap_times,
 )
-from ui.strategy_gui import main as launch_strategy_gui
 
 def create_grid():
 
