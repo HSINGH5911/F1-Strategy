@@ -6,7 +6,7 @@ from simulation.lap_time_model import calc_lap_time
 from simulation.degredation_model import update_tire_distance
 from simulation.overtakes import attempt_overtake, swap_pos
 from simulation.pit_stop_model import perform_stop
-from data.weather import update_weather as update_track_wetness, weather_state
+from data.random_weather import update_weather as update_track_wetness, weather_state
 
 
 def simulate_lap(drivers, track, race_state, total_laps):

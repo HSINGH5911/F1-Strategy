@@ -5,9 +5,8 @@ from matplotlib import pyplot as plt
 import fastf1
 import fastf1.plotting
 
-fastf1.plotting.setup_mpl(mpl_timedelta_support=True, color_scheme='fastf1')
-
-def show_data(drivers, year, location, type):
+def show_dist_data(drivers, year, location, type):
+    fastf1.plotting.setup_mpl(mpl_timedelta_support=True, color_scheme='fastf1')
     race = fastf1.get_session(year, location, type)
     race.load()
 

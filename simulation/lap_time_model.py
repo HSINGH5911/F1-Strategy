@@ -6,7 +6,7 @@ from simulation.degredation_model import (
     weather_deg_modifier,
 )
 
-from data.weather import weather_pace_penalty
+from data.random_weather import weather_pace_penalty
 
 def calc_lap_time(driver, track, race_state):
     lap_time = track["base_lap_time"]

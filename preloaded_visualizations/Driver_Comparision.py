@@ -3,9 +3,8 @@ from matplotlib import pyplot as plt
 import fastf1
 from fastf1 import plotting
 
-fastf1.plotting.setup_mpl(mpl_timedelta_support=True, color_scheme='fastf1')
-
-def show_data(drivers, year, location, session_type):
+def show_comparison_data(drivers, year, location, session_type):
+    fastf1.plotting.setup_mpl(mpl_timedelta_support=True, color_scheme='fastf1')
     session = fastf1.get_session(year, location, session_type)
     session.load()
 
@@ -35,6 +34,3 @@ def show_data(drivers, year, location, session_type):
     plotting.add_sorted_driver_legend(ax, session)
 
     plt.show()
-
-if __name__ == '__main__':
-    show_data(["VER", "RUS", "HAM"], 2023, "Monaco", "R")

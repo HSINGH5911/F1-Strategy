@@ -3,60 +3,59 @@ from matplotlib import pyplot as plt
 import fastf1
 import fastf1.plotting
 
-session = fastf1.get_session(2025, "Monaco", "R")
-session.load()
-laps = session.laps
+def show_tire_strats(year, location, session_type):
+    session = fastf1.get_session(year, location, session_type)
+    session.load()
+    laps = session.laps
 
-drivers = session.drivers
-print(drivers)
+    drivers = session.drivers
+    drivers = [session.get_driver(driver)["Abbreviation"] for driver in drivers]
 
-drivers = [session.get_driver(driver)["Abbreviation"] for driver in drivers]
-print(drivers)
+    stints = laps[["Driver", "Stint", "Compound", "LapNumber"]]
+    stints = stints.groupby(["Driver", "Stint", "Compound"])
+    stints = stints.count().reset_index()
 
-stints = laps[["Driver", "Stint", "Compound", "LapNumber"]]
-stints = stints.groupby(["Driver", "Stint", "Compound"])
-stints = stints.count().reset_index()
+    stints = stints.rename(columns={"LapNumber": "StintLength"})
 
-stints = stints.rename(columns={"LapNumber": "StintLength"})
-print(stints)
+    fig, ax = plt.subplots(figsize=(5, 10))
 
-fig, ax = plt.subplots(figsize=(5, 10))
+    for driver in drivers:
+        driver_stints = stints.loc[stints["Driver"] == driver]
 
-for driver in drivers:
-    driver_stints = stints.loc[stints["Driver"] == driver]
+        previous_stint_end = 0
+        for idx, row in driver_stints.iterrows():
+            compound_colors = {
+                "SOFT": "#FF6961", #red
+                "MEDIUM": "#FDFD96", #yellow
+                "HARD": "#FFFFFF", #white
+                "INTERMEDIATE": "green",
+                "WET": "blue"
+            }
 
-    previous_stint_end = 0
-    for idx, row in driver_stints.iterrows():
-        compound_colors = {
-            "SOFT": "#FF6961",
-            "MEDIUM": "#FDFD96",
-            "HARD": "#FFFFFF",
-            "INTERMEDIATE": "green",
-            "WET": "blue"
-        }
+            compound_color = compound_colors[row["Compound"]]
 
-        compound_color = compound_colors[row["Compound"]]
+            plt.barh(
+                y=driver,
+                width=row["StintLength"],
+                left=previous_stint_end,
+                color=compound_color,
+                edgecolor="black",
+                fill=True
+            )
 
-        plt.barh(
-            y=driver,
-            width=row["StintLength"],
-            left=previous_stint_end,
-            color=compound_color,
-            edgecolor="black",
-            fill=True
-        )
+            previous_stint_end += row["StintLength"]
 
-        previous_stint_end += row["StintLength"]
+    plt.title(str(year) + " " + location + " Grand Prix Strats")
+    plt.xlabel("Lap Number")
+    plt.grid(False)
 
-plt.title("2022 Hungarian Grand Prix Strategies")
-plt.xlabel("Lap Number")
-plt.grid(False)
+    ax.invert_yaxis()
 
-ax.invert_yaxis()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
 
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['left'].set_visible(False)
+    plt.tight_layout()
+    plt.show()
 
-plt.tight_layout()
-plt.show()
+show_tire_strats(2025, "Monaco", "R")

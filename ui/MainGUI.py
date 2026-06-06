@@ -1,11 +1,11 @@
 from tkinter import *
 from tkinter import ttk, font
 
-from preloaded_visualizations.LapTimes import *
-from preloaded_visualizations.Track_Map import *
-from preloaded_visualizations.Tire_Strats import *
-from preloaded_visualizations.Driver_Comparision import *
-from preloaded_visualizations.Laptime_Distribution import *
+from preloaded_visualizations.LapTimes import show_lap_time_data
+from preloaded_visualizations.Track_Map import show_track
+from preloaded_visualizations.Tire_Strats import show_tire_strats
+from preloaded_visualizations.Driver_Comparision import show_comparison_data
+from preloaded_visualizations.Laptime_Distribution import show_dist_data
 
 root = Tk()
 root.geometry('800x600')
