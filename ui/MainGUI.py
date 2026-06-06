@@ -14,7 +14,28 @@ frm = ttk.Frame(root)
 frm.pack(fill='both', expand=True)
 
 def view_data():
-    print("Data")
+    data_frm = ttk.Frame(frm)
+    data_frm.pack(fill='both', expand=True)
+
+    data_welcome = ttk.Label(data_frm, text="What data do you want to see?")
+    data_welcome.place(relx=0.5, rely=0.2, anchor='center')
+
+    view_tire_strats = ttk.Button(
+        data_frm,
+        text="View Tire Strats",
+        command=lambda: view_tire_strat(data_frm)
+    )
+    view_tire_strats.place(relx=0.5, rely=0.3, anchor='center')
+
+
+def view_tire_strat(data_frm):
+    tire_strat_frm = ttk.Frame(data_frm)
+    tire_strat_frm.pack(fill='both', expand=True)
+
+    year_label = ttk.Label(frm, text="Year")
+    year_label.place(relx=0.3, rely=0.2, anchor='center')
+
+
 
 def view_sim():
     print("Sim")
