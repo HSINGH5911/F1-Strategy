@@ -2,8 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import fastf1
+from util.fastf1_cache import enable_fastf1_cache
 
 def show_track(year, location, session_type):
+    enable_fastf1_cache()
     session = fastf1.get_session(year, location, session_type)
     session.load()
 

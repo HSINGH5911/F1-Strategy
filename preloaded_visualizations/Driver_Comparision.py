@@ -2,8 +2,10 @@ from matplotlib import pyplot as plt
 
 import fastf1
 from fastf1 import plotting
+from util.fastf1_cache import enable_fastf1_cache
 
 def show_comparison_data(drivers, year, location, session_type):
+    enable_fastf1_cache()
     fastf1.plotting.setup_mpl(mpl_timedelta_support=True, color_scheme='fastf1')
     session = fastf1.get_session(year, location, session_type)
     session.load()

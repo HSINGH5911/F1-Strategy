@@ -3,8 +3,10 @@ from matplotlib import pyplot as plt
 
 import fastf1
 import fastf1.plotting
+from util.fastf1_cache import enable_fastf1_cache
 
 def show_lap_time_data(driver, year, location, session_type):
+    enable_fastf1_cache()
     fastf1.plotting.setup_mpl(mpl_timedelta_support=True, color_scheme='fastf1')
 
     race = fastf1.get_session(year, location, session_type)

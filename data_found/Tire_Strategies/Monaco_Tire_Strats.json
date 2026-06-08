@@ -2,6 +2,378 @@
     "location": "Monaco",
     "session_type": "R",
     "years": {
+        "2018": {
+            "year": 2018,
+            "location": "Monaco",
+            "session_type": "R",
+            "drivers": {
+                "RIC": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 2
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 3,
+                        "end_lap": 17
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 18,
+                        "end_lap": 78
+                    }
+                ],
+                "VET": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 16
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 17,
+                        "end_lap": 78
+                    }
+                ],
+                "HAM": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 12
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 13,
+                        "end_lap": 78
+                    }
+                ],
+                "RAI": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 17
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 18,
+                        "end_lap": 78
+                    }
+                ],
+                "BOT": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 17
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 18,
+                        "end_lap": 78
+                    }
+                ],
+                "OCO": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 23
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 24,
+                        "end_lap": 78
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 37
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 38,
+                        "end_lap": 78
+                    }
+                ],
+                "HUL": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 50
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 51,
+                        "end_lap": 78
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 47
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 48,
+                        "end_lap": 78
+                    }
+                ],
+                "SAI": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 16
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 17,
+                        "end_lap": 78
+                    }
+                ],
+                "ERI": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 17
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 18,
+                        "end_lap": 78
+                    }
+                ],
+                "PER": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 21
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 22,
+                        "end_lap": 78
+                    }
+                ],
+                "MAG": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 17
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 18,
+                        "end_lap": 78
+                    }
+                ],
+                "VAN": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 21,
+                        "end_lap": 72
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 73,
+                        "end_lap": 77
+                    }
+                ],
+                "GRO": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 15
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 16,
+                        "end_lap": 68
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 69,
+                        "end_lap": 77
+                    }
+                ],
+                "SIR": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 19
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 20,
+                        "end_lap": 49
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 50,
+                        "end_lap": 77
+                    }
+                ],
+                "STR": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 9
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 10,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 35,
+                        "end_lap": 59
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 60,
+                        "end_lap": 76
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 14
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 15,
+                        "end_lap": 71
+                    }
+                ],
+                "HAR": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 13
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 14,
+                        "end_lap": 71
+                    }
+                ],
+                "ALO": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 19
+                    },
+                    {
+                        "compound": "SUPERSOFT",
+                        "start_lap": 20,
+                        "end_lap": 53
+                    }
+                ]
+            }
+        },
         "2019": {
             "year": 2019,
             "location": "Monaco",
@@ -295,11 +667,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 23,
-                        "end_lap": 26
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 27,
                         "end_lap": 53
                     }
                 ],
@@ -324,11 +691,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 23,
-                        "end_lap": 26
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 27,
                         "end_lap": 53
                     }
                 ],
@@ -341,11 +703,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 23,
-                        "end_lap": 26
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 27,
                         "end_lap": 53
                     }
                 ],
@@ -358,11 +715,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 23,
-                        "end_lap": 26
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 27,
                         "end_lap": 53
                     }
                 ],
@@ -380,11 +732,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 27,
-                        "end_lap": 28
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 29,
                         "end_lap": 53
                     }
                 ],
@@ -414,11 +761,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 23,
-                        "end_lap": 26
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 27,
                         "end_lap": 53
                     }
                 ],
@@ -431,11 +773,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 23,
-                        "end_lap": 26
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 27,
                         "end_lap": 53
                     }
                 ],
@@ -465,11 +802,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 23,
-                        "end_lap": 26
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 27,
                         "end_lap": 53
                     }
                 ],
@@ -538,11 +870,6 @@
                     {
                         "compound": "SOFT",
                         "start_lap": 27,
-                        "end_lap": 30
-                    },
-                    {
-                        "compound": "SOFT",
-                        "start_lap": 31,
                         "end_lap": 53
                     }
                 ],
@@ -555,11 +882,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 23,
-                        "end_lap": 26
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 27,
                         "end_lap": 30
                     }
                 ],
@@ -868,11 +1190,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 22,
-                        "end_lap": 30
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 31,
                         "end_lap": 64
                     }
                 ],
@@ -912,11 +1229,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 22,
-                        "end_lap": 30
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 31,
                         "end_lap": 64
                     }
                 ],
@@ -951,11 +1263,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 23,
-                        "end_lap": 30
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 31,
                         "end_lap": 51
                     },
                     {
@@ -1012,11 +1319,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 21,
-                        "end_lap": 30
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 31,
                         "end_lap": 64
                     }
                 ],
@@ -1034,11 +1336,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 24,
-                        "end_lap": 30
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 31,
                         "end_lap": 64
                     }
                 ],
@@ -1056,11 +1353,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 23,
-                        "end_lap": 30
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 31,
                         "end_lap": 64
                     }
                 ],
@@ -1090,11 +1382,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 20,
-                        "end_lap": 30
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 31,
                         "end_lap": 64
                     }
                 ],
@@ -1102,11 +1389,6 @@
                     {
                         "compound": "WET",
                         "start_lap": 1,
-                        "end_lap": 1
-                    },
-                    {
-                        "compound": "WET",
-                        "start_lap": 2,
                         "end_lap": 2
                     },
                     {
@@ -1205,11 +1487,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 23,
-                        "end_lap": 29
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 30,
                         "end_lap": 49
                     }
                 ],
@@ -1773,11 +2050,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 1,
-                        "end_lap": 1
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 2,
                         "end_lap": 57
                     },
                     {
@@ -1910,11 +2182,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 1,
-                        "end_lap": 18
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 19,
                         "end_lap": 56
                     },
                     {
@@ -1944,11 +2211,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 1,
-                        "end_lap": 16
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 17,
                         "end_lap": 28
                     },
                     {
@@ -1978,11 +2240,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 1,
-                        "end_lap": 32
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 33,
                         "end_lap": 40
                     },
                     {
@@ -2000,11 +2257,6 @@
                     {
                         "compound": "MEDIUM",
                         "start_lap": 49,
-                        "end_lap": 53
-                    },
-                    {
-                        "compound": "MEDIUM",
-                        "start_lap": 54,
                         "end_lap": 76
                     }
                 ],
@@ -2085,11 +2337,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 1,
-                        "end_lap": 17
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 18,
                         "end_lap": 64
                     },
                     {
@@ -2153,11 +2400,6 @@
                     {
                         "compound": "HARD",
                         "start_lap": 1,
-                        "end_lap": 16
-                    },
-                    {
-                        "compound": "HARD",
-                        "start_lap": 17,
                         "end_lap": 37
                     }
                 ],
@@ -2183,7 +2425,6 @@
         "2014": "The data you are trying to access has not been loaded yet. See `Session.load`",
         "2015": "The data you are trying to access has not been loaded yet. See `Session.load`",
         "2016": "The data you are trying to access has not been loaded yet. See `Session.load`",
-        "2017": "The data you are trying to access has not been loaded yet. See `Session.load`",
-        "2018": "single positional indexer is out-of-bounds"
+        "2017": "The data you are trying to access has not been loaded yet. See `Session.load`"
     }
 }

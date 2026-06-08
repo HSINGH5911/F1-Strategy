@@ -4,11 +4,15 @@ import fastf1
 import json
 from pathlib import Path
 
+import pandas as pd
 from matplotlib import pyplot as plt
+
+from util.fastf1_cache import enable_fastf1_cache
 
 
 def get_session(year, location, session_type):
     """Return the FastF1 session for a year/location/session type."""
+    enable_fastf1_cache()
     return fastf1.get_session(year, location, session_type)
 
 
@@ -81,19 +85,95 @@ def get_tire_strategy_data(year, location, session_type):
 
     for driver in drivers:
         driver_laps = laps[laps["Driver"] == driver]
-
-        data["drivers"][driver] = []
-
-        for stint in driver_laps["Stint"].unique():
-            stint_laps = driver_laps[driver_laps["Stint"] == stint]
-
-            data["drivers"][driver].append({
-                "compound": stint_laps["Compound"].iloc[0],
-                "start_lap": int(stint_laps["LapNumber"].min()),
-                "end_lap": int(stint_laps["LapNumber"].max())
-            })
+        data["drivers"][driver] = build_tire_runs(driver_laps)
 
     return data
+
+
+def build_tire_runs(driver_laps):
+    """Collapse FastF1 lap rows into real tire runs.
+
+    FastF1's ``Stint`` column can split during safety-car, red-flag, or
+    pit-lane timing oddities. This function keeps same-compound stops when the
+    lap data shows a genuinely fresh tire, while merging same-compound timing
+    artifacts back into the surrounding run.
+    """
+    valid_laps = driver_laps.dropna(subset=["LapNumber", "Compound"])
+    valid_laps = valid_laps.sort_values("LapNumber")
+    stint_lengths = valid_laps.groupby("Stint")["LapNumber"].count().to_dict()
+
+    tire_runs = []
+
+    for _, lap in valid_laps.iterrows():
+        lap_number = int(lap["LapNumber"])
+        compound = lap["Compound"]
+        tire_life = lap.get("TyreLife")
+
+        if not tire_runs:
+            tire_runs.append(new_tire_run(compound, lap_number, tire_life))
+            continue
+
+        current_run = tire_runs[-1]
+
+        if starts_new_tire_run(lap, current_run, stint_lengths):
+            tire_runs.append(new_tire_run(compound, lap_number, tire_life))
+        else:
+            current_run["end_lap"] = lap_number
+
+        tire_runs[-1]["last_tire_life"] = tire_life
+
+    for tire_run in tire_runs:
+        tire_run.pop("last_tire_life", None)
+
+    return tire_runs
+
+
+def new_tire_run(compound, lap_number, tire_life):
+    """Create the internal tire-run structure used while parsing laps."""
+    return {
+        "compound": compound,
+        "start_lap": lap_number,
+        "end_lap": lap_number,
+        "last_tire_life": tire_life
+    }
+
+
+def starts_new_tire_run(lap, current_run, stint_lengths):
+    """Return True if a lap should start a new plotted tire run."""
+    if lap["Compound"] != current_run["compound"]:
+        return True
+
+    return is_real_same_compound_change(lap, current_run, stint_lengths)
+
+
+def is_real_same_compound_change(lap, current_run, stint_lengths):
+    """Detect same-compound pit stops without counting timing artifacts."""
+    if not bool(lap.get("FreshTyre")):
+        return False
+
+    tire_life = lap.get("TyreLife")
+    previous_tire_life = current_run.get("last_tire_life")
+
+    if pd.isna(tire_life) or pd.isna(previous_tire_life):
+        return False
+
+    if tire_life > 3 or tire_life >= previous_tire_life:
+        return False
+
+    if is_one_lap_pit_lane_artifact(lap, stint_lengths):
+        return False
+
+    return True
+
+
+def is_one_lap_pit_lane_artifact(lap, stint_lengths):
+    """Catch same-compound one-lap timing splits during messy race periods."""
+    stint = lap.get("Stint")
+    if pd.isna(stint) or stint_lengths.get(stint, 0) > 1:
+        return False
+
+    return pd.notna(lap.get("PitInTime")) and pd.notna(lap.get("PitOutTime"))
+
 
 def show_tire_strats(year, location, session_type):
     """Plot tire strategies used by the drivers for one session."""
@@ -104,13 +184,6 @@ def show_tire_strats(year, location, session_type):
 
     drivers = [session.get_driver(driver)["Abbreviation"]
                for driver in session.drivers]
-
-    stints = laps[["Driver", "Stint", "Compound", "LapNumber"]]
-    stints = stints.groupby(
-        ["Driver", "Stint", "Compound"]
-    ).count().reset_index()
-
-    stints = stints.rename(columns={"LapNumber": "StintLength"})
 
     fig, ax = plt.subplots(figsize=(5, 10))
 
@@ -123,20 +196,18 @@ def show_tire_strats(year, location, session_type):
     }
 
     for driver in drivers:
-        driver_stints = stints[stints["Driver"] == driver]
+        driver_laps = laps[laps["Driver"] == driver]
+        tire_runs = build_tire_runs(driver_laps)
 
-        previous_stint_end = 0
-
-        for _, row in driver_stints.iterrows():
+        for tire_run in tire_runs:
+            stint_length = tire_run["end_lap"] - tire_run["start_lap"] + 1
             plt.barh(
                 y=driver,
-                width=row["StintLength"],
-                left=previous_stint_end,
-                color=compound_colors.get(row["Compound"], "gray"),
+                width=stint_length,
+                left=tire_run["start_lap"] - 1,
+                color=compound_colors.get(tire_run["compound"], "gray"),
                 edgecolor="black"
             )
-
-            previous_stint_end += row["StintLength"]
 
     plt.title(f"{year} {location} Grand Prix Strats")
     plt.xlabel("Lap Number")
