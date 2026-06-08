@@ -1,46 +1,102 @@
-from pathlib import Path
+from collections.abc import Iterable
+
 import fastf1
+import json
+from pathlib import Path
+
 from matplotlib import pyplot as plt
 
 
 def get_session(year, location, session_type):
+    """Return the FastF1 session for a year/location/session type."""
     return fastf1.get_session(year, location, session_type)
 
 
-def write_to_file(year, location, session_type, out_file):
-    session = get_session(year, location, session_type)
-    session.load()
+def write_to_file(years, location, session_type, out_file):
+    """Write tire strategy data for one year or many years to JSON.
 
-    drivers = [session.get_driver(driver)["Abbreviation"]
-               for driver in session.drivers]
+    ``years`` can be a single integer, or an iterable such as
+    ``range(2011, 2026)`` when loading every race strategy from 2011-2025.
+    """
+    session_type = session_type.upper()
 
-    laps = session.laps
+    if is_year_collection(years):
+        years = list(years)
+        data = {
+            "location": location,
+            "session_type": session_type,
+            "years": {},
+            "failed_years": {}
+        }
+
+        for year in years:
+            try:
+                data["years"][year] = get_tire_strategy_data(
+                    year,
+                    location,
+                    session_type
+                )
+            except Exception as error:
+                # Some races did not exist in every season. Keep loading the
+                # years that do exist and record the skipped ones for debugging.
+                data["failed_years"][year] = str(error)
+    else:
+        data = get_tire_strategy_data(years, location, session_type)
+
+    if is_year_collection(years) and not data["years"]:
+        raise ValueError(
+            f"No tire strategy data was found for {location} "
+            f"from {min(years)} to {max(years)}."
+        )
 
     out_file.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(out_file, "w") as file:  # overwrite instead of append
-        file.write(f"{year} {location} {session_type}\n\n")
+    with open(out_file, "w") as file:
+        json.dump(data, file, indent=4)
 
-        for driver in drivers:
-            driver_laps = laps[laps["Driver"] == driver]
 
-            file.write(f"{driver}\n")
+def is_year_collection(years):
+    """Return True when ``years`` should be treated as multiple years."""
+    return isinstance(years, Iterable) and not isinstance(years, (str, bytes))
 
-            for stint in driver_laps["Stint"].unique():
-                stint_laps = driver_laps[driver_laps["Stint"] == stint]
 
-                compound = stint_laps["Compound"].iloc[0]
-                start_lap = int(stint_laps["LapNumber"].min())
-                end_lap = int(stint_laps["LapNumber"].max())
+def get_tire_strategy_data(year, location, session_type):
+    """Build the serializable tire-strategy payload for one session."""
+    session = get_session(year, location, session_type)
+    session.load()
 
-                file.write(
-                    f"  {compound}: Laps {start_lap}-{end_lap}\n"
-                )
+    laps = session.laps
 
-            file.write("\n")
+    data = {
+        "year": year,
+        "location": location,
+        "session_type": session_type,
+        "drivers": {}
+    }
 
+    drivers = [
+        session.get_driver(driver)["Abbreviation"]
+        for driver in session.drivers
+    ]
+
+    for driver in drivers:
+        driver_laps = laps[laps["Driver"] == driver]
+
+        data["drivers"][driver] = []
+
+        for stint in driver_laps["Stint"].unique():
+            stint_laps = driver_laps[driver_laps["Stint"] == stint]
+
+            data["drivers"][driver].append({
+                "compound": stint_laps["Compound"].iloc[0],
+                "start_lap": int(stint_laps["LapNumber"].min()),
+                "end_lap": int(stint_laps["LapNumber"].max())
+            })
+
+    return data
 
 def show_tire_strats(year, location, session_type):
+    """Plot tire strategies used by the drivers for one session."""
     session = get_session(year, location, session_type)
     session.load()
 
@@ -100,7 +156,7 @@ def main(year, location, session_type):
         Path(__file__).resolve().parents[1]
         / "data_found"
         / "Tire_Strategies"
-        / f"{location.replace(' ', '_')}_Tire_Strats.txt"
+        / f"{location.replace(' ', '_')}_Tire_Strats.json"
     )
 
     write_to_file(year, location, session_type, output_file)
