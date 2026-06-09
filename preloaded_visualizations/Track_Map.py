@@ -58,6 +58,9 @@ def show_track(year, location, session_type):
     plt.axis('equal')
     plt.show()
 
+def main(year, location, session_type):
+    show_track(year, location, session_type)
+
 
 if __name__ == '__main__':
     show_track(2023, "Monaco", "R")

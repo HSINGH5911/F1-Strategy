@@ -1,0 +1,2352 @@
+{
+    "location": "Singapore",
+    "session_type": "R",
+    "years": {
+        "2018": {
+            "year": 2018,
+            "location": "Singapore",
+            "session_type": "R",
+            "drivers": {
+                "HAM": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 2
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 3,
+                        "end_lap": 15
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 16,
+                        "end_lap": 61
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 17
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 18,
+                        "end_lap": 61
+                    }
+                ],
+                "VET": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 14
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 15,
+                        "end_lap": 61
+                    }
+                ],
+                "BOT": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 16
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 17,
+                        "end_lap": 61
+                    }
+                ],
+                "RAI": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 22
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 23,
+                        "end_lap": 61
+                    }
+                ],
+                "RIC": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 27
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 28,
+                        "end_lap": 61
+                    }
+                ],
+                "ALO": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 38
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 39,
+                        "end_lap": 61
+                    }
+                ],
+                "SAI": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 37
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 38,
+                        "end_lap": 60
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 38
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 39,
+                        "end_lap": 60
+                    }
+                ],
+                "HUL": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 15
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 16,
+                        "end_lap": 60
+                    }
+                ],
+                "ERI": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 56
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 57,
+                        "end_lap": 60
+                    }
+                ],
+                "VAN": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 58
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 59,
+                        "end_lap": 60
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 26
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 27,
+                        "end_lap": 60
+                    }
+                ],
+                "STR": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 2,
+                        "end_lap": 40
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 41,
+                        "end_lap": 60
+                    }
+                ],
+                "GRO": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 16
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 17,
+                        "end_lap": 60
+                    }
+                ],
+                "PER": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 17
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 18,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 34,
+                        "end_lap": 60
+                    }
+                ],
+                "HAR": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 2,
+                        "end_lap": 14
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 15,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 37,
+                        "end_lap": 60
+                    }
+                ],
+                "MAG": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 26
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 27,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 37,
+                        "end_lap": 59
+                    }
+                ],
+                "SIR": [
+                    {
+                        "compound": "nan",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "ULTRASOFT",
+                        "start_lap": 2,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 4,
+                        "end_lap": 58
+                    },
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 59,
+                        "end_lap": 59
+                    }
+                ],
+                "OCO": [
+                    {
+                        "compound": "HYPERSOFT",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    }
+                ]
+            }
+        },
+        "2019": {
+            "year": 2019,
+            "location": "Singapore",
+            "session_type": "R",
+            "drivers": {
+                "VET": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 19
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 20,
+                        "end_lap": 61
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 61
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 19
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 20,
+                        "end_lap": 61
+                    }
+                ],
+                "HAM": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 26
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 27,
+                        "end_lap": 61
+                    }
+                ],
+                "BOT": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 22
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 23,
+                        "end_lap": 61
+                    }
+                ],
+                "ALB": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 61
+                    }
+                ],
+                "NOR": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 61
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "HARD",
+                        "start_lap": 1,
+                        "end_lap": 32
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 33,
+                        "end_lap": 61
+                    }
+                ],
+                "HUL": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 2,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 37,
+                        "end_lap": 61
+                    }
+                ],
+                "GIO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 35,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 37,
+                        "end_lap": 61
+                    }
+                ],
+                "GRO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 23
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 24,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 36,
+                        "end_lap": 61
+                    }
+                ],
+                "SAI": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 2,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 36,
+                        "end_lap": 61
+                    }
+                ],
+                "STR": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 31
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 32,
+                        "end_lap": 41
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 42,
+                        "end_lap": 44
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 45,
+                        "end_lap": 61
+                    }
+                ],
+                "RIC": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 35,
+                        "end_lap": 61
+                    }
+                ],
+                "KVY": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 12
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 13,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 37,
+                        "end_lap": 61
+                    }
+                ],
+                "KUB": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 21
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 22,
+                        "end_lap": 44
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 45,
+                        "end_lap": 61
+                    }
+                ],
+                "MAG": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 18
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 19,
+                        "end_lap": 56
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 57,
+                        "end_lap": 61
+                    }
+                ],
+                "RAI": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 15
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 16,
+                        "end_lap": 50
+                    }
+                ],
+                "PER": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 13
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 14,
+                        "end_lap": 43
+                    }
+                ],
+                "RUS": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 2,
+                        "end_lap": 35
+                    }
+                ]
+            }
+        },
+        "2020": {
+            "year": 2020,
+            "location": "Singapore",
+            "session_type": "R",
+            "drivers": {
+                "HAM": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 66
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 67,
+                        "end_lap": 70
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 4
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 5,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 37,
+                        "end_lap": 70
+                    }
+                ],
+                "BOT": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 2
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 3,
+                        "end_lap": 49
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 50,
+                        "end_lap": 70
+                    }
+                ],
+                "STR": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 52
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 53,
+                        "end_lap": 70
+                    }
+                ],
+                "ALB": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 35,
+                        "end_lap": 70
+                    }
+                ],
+                "VET": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 29
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 30,
+                        "end_lap": 69
+                    }
+                ],
+                "PER": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 36,
+                        "end_lap": 69
+                    }
+                ],
+                "RIC": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 4
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 5,
+                        "end_lap": 43
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 44,
+                        "end_lap": 69
+                    }
+                ],
+                "SAI": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 40
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 41,
+                        "end_lap": 69
+                    }
+                ],
+                "MAG": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 36,
+                        "end_lap": 69
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 2
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 3,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 69
+                    }
+                ],
+                "KVY": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 2,
+                        "end_lap": 18
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 19,
+                        "end_lap": 69
+                    }
+                ],
+                "NOR": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 4
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 5,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 36,
+                        "end_lap": 69
+                    }
+                ],
+                "OCO": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 4
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 5,
+                        "end_lap": 31
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 32,
+                        "end_lap": 69
+                    }
+                ],
+                "RAI": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 34,
+                        "end_lap": 69
+                    }
+                ],
+                "GRO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 35,
+                        "end_lap": 69
+                    }
+                ],
+                "GIO": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 4
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 5,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 21,
+                        "end_lap": 40
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 41,
+                        "end_lap": 69
+                    }
+                ],
+                "RUS": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 4
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 5,
+                        "end_lap": 19
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 20,
+                        "end_lap": 69
+                    }
+                ],
+                "LAT": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 4,
+                        "end_lap": 4
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 5,
+                        "end_lap": 39
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 40,
+                        "end_lap": 52
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 53,
+                        "end_lap": 65
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 4,
+                        "end_lap": 15
+                    }
+                ]
+            }
+        },
+        "2021": {
+            "year": 2021,
+            "location": "Singapore",
+            "session_type": "R",
+            "drivers": {
+                "OCO": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 37
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 38,
+                        "end_lap": 70
+                    }
+                ],
+                "HAM": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 2
+                    },
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 3,
+                        "end_lap": 4
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 5,
+                        "end_lap": 19
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 20,
+                        "end_lap": 47
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 48,
+                        "end_lap": 70
+                    }
+                ],
+                "SAI": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 32
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 33,
+                        "end_lap": 70
+                    }
+                ],
+                "ALO": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 39
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 40,
+                        "end_lap": 70
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 30
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 31,
+                        "end_lap": 68
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 69,
+                        "end_lap": 70
+                    }
+                ],
+                "TSU": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 22
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 23,
+                        "end_lap": 70
+                    }
+                ],
+                "LAT": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 23
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 24,
+                        "end_lap": 70
+                    }
+                ],
+                "RUS": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 21
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 22,
+                        "end_lap": 70
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 40
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 41,
+                        "end_lap": 70
+                    }
+                ],
+                "RAI": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 15
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 16,
+                        "end_lap": 53
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 54,
+                        "end_lap": 69
+                    }
+                ],
+                "RIC": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 69
+                    }
+                ],
+                "MSC": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 35,
+                        "end_lap": 69
+                    }
+                ],
+                "GIO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    },
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 2,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 34,
+                        "end_lap": 69
+                    }
+                ],
+                "MAZ": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    }
+                ],
+                "NOR": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 2
+                    }
+                ],
+                "BOT": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    }
+                ],
+                "PER": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    }
+                ],
+                "STR": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    }
+                ],
+                "VET": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 3
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 4,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 37,
+                        "end_lap": 70
+                    }
+                ]
+            }
+        },
+        "2022": {
+            "year": 2022,
+            "location": "Singapore",
+            "session_type": "R",
+            "drivers": {
+                "PER": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 36,
+                        "end_lap": 59
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 35,
+                        "end_lap": 59
+                    }
+                ],
+                "SAI": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 36,
+                        "end_lap": 59
+                    }
+                ],
+                "NOR": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 37,
+                        "end_lap": 59
+                    }
+                ],
+                "RIC": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 37,
+                        "end_lap": 59
+                    }
+                ],
+                "STR": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 36,
+                        "end_lap": 59
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 36,
+                        "end_lap": 40
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 41,
+                        "end_lap": 59
+                    }
+                ],
+                "VET": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 35,
+                        "end_lap": 59
+                    }
+                ],
+                "HAM": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 35,
+                        "end_lap": 59
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 34,
+                        "end_lap": 59
+                    }
+                ],
+                "BOT": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 34,
+                        "end_lap": 59
+                    }
+                ],
+                "MAG": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 34,
+                        "end_lap": 59
+                    }
+                ],
+                "MSC": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 35,
+                        "end_lap": 41
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 42,
+                        "end_lap": 58
+                    }
+                ],
+                "RUS": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 21
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 22,
+                        "end_lap": 35
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 36,
+                        "end_lap": 41
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 42,
+                        "end_lap": 51
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 52,
+                        "end_lap": 57
+                    }
+                ],
+                "TSU": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 34,
+                        "end_lap": 35
+                    }
+                ],
+                "OCO": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 27
+                    }
+                ],
+                "ALB": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 25
+                    }
+                ],
+                "ALO": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 21
+                    }
+                ],
+                "LAT": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 7
+                    }
+                ],
+                "ZHO": [
+                    {
+                        "compound": "INTERMEDIATE",
+                        "start_lap": 1,
+                        "end_lap": 7
+                    }
+                ]
+            }
+        },
+        "2023": {
+            "year": 2023,
+            "location": "Singapore",
+            "session_type": "R",
+            "drivers": {
+                "SAI": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 62
+                    }
+                ],
+                "NOR": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 62
+                    }
+                ],
+                "HAM": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 44
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 45,
+                        "end_lap": 62
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 62
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "HARD",
+                        "start_lap": 1,
+                        "end_lap": 40
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 41,
+                        "end_lap": 62
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 62
+                    }
+                ],
+                "PIA": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 62
+                    }
+                ],
+                "PER": [
+                    {
+                        "compound": "HARD",
+                        "start_lap": 1,
+                        "end_lap": 39
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 40,
+                        "end_lap": 62
+                    }
+                ],
+                "LAW": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 62
+                    }
+                ],
+                "MAG": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 43
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 44,
+                        "end_lap": 62
+                    }
+                ],
+                "ALB": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 43
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 44,
+                        "end_lap": 62
+                    }
+                ],
+                "ZHO": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 2
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 3,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 21,
+                        "end_lap": 62
+                    }
+                ],
+                "HUL": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 62
+                    }
+                ],
+                "SAR": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 19
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 20,
+                        "end_lap": 43
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 44,
+                        "end_lap": 62
+                    }
+                ],
+                "ALO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 44
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 45,
+                        "end_lap": 62
+                    }
+                ],
+                "RUS": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 44
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 45,
+                        "end_lap": 62
+                    }
+                ],
+                "BOT": [
+                    {
+                        "compound": "HARD",
+                        "start_lap": 1,
+                        "end_lap": 40
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 41,
+                        "end_lap": 52
+                    }
+                ],
+                "OCO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 43
+                    }
+                ],
+                "TSU": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 1
+                    }
+                ],
+                "STR": []
+            }
+        },
+        "2024": {
+            "year": 2024,
+            "location": "Singapore",
+            "session_type": "R",
+            "drivers": {
+                "NOR": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 30
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 31,
+                        "end_lap": 62
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 29
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 30,
+                        "end_lap": 62
+                    }
+                ],
+                "PIA": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 38
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 39,
+                        "end_lap": 62
+                    }
+                ],
+                "RUS": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 27
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 28,
+                        "end_lap": 62
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 36
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 37,
+                        "end_lap": 62
+                    }
+                ],
+                "HAM": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 17
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 18,
+                        "end_lap": 62
+                    }
+                ],
+                "SAI": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 13
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 14,
+                        "end_lap": 62
+                    }
+                ],
+                "ALO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 25
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 26,
+                        "end_lap": 61
+                    }
+                ],
+                "HUL": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 29
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 30,
+                        "end_lap": 61
+                    }
+                ],
+                "PER": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 28
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 29,
+                        "end_lap": 61
+                    }
+                ],
+                "COL": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 29
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 30,
+                        "end_lap": 61
+                    }
+                ],
+                "TSU": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 34,
+                        "end_lap": 61
+                    }
+                ],
+                "OCO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 29
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 30,
+                        "end_lap": 61
+                    }
+                ],
+                "STR": [
+                    {
+                        "compound": "HARD",
+                        "start_lap": 1,
+                        "end_lap": 26
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 27,
+                        "end_lap": 61
+                    }
+                ],
+                "ZHO": [
+                    {
+                        "compound": "HARD",
+                        "start_lap": 1,
+                        "end_lap": 34
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 35,
+                        "end_lap": 61
+                    }
+                ],
+                "BOT": [
+                    {
+                        "compound": "HARD",
+                        "start_lap": 1,
+                        "end_lap": 33
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 34,
+                        "end_lap": 61
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 37
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 38,
+                        "end_lap": 61
+                    }
+                ],
+                "RIC": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 10
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 11,
+                        "end_lap": 46
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 47,
+                        "end_lap": 61
+                    }
+                ],
+                "MAG": [
+                    {
+                        "compound": "HARD",
+                        "start_lap": 1,
+                        "end_lap": 28
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 29,
+                        "end_lap": 49
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 50,
+                        "end_lap": 57
+                    }
+                ],
+                "ALB": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 11
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 12,
+                        "end_lap": 15
+                    }
+                ]
+            }
+        },
+        "2025": {
+            "year": 2025,
+            "location": "Singapore",
+            "session_type": "R",
+            "drivers": {
+                "RUS": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 25
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 26,
+                        "end_lap": 62
+                    }
+                ],
+                "VER": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 19
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 20,
+                        "end_lap": 62
+                    }
+                ],
+                "NOR": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 26
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 27,
+                        "end_lap": 62
+                    }
+                ],
+                "PIA": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 27
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 28,
+                        "end_lap": 62
+                    }
+                ],
+                "ANT": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 25
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 26,
+                        "end_lap": 62
+                    }
+                ],
+                "LEC": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 21
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 22,
+                        "end_lap": 62
+                    }
+                ],
+                "ALO": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 27
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 28,
+                        "end_lap": 62
+                    }
+                ],
+                "HAM": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 24
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 25,
+                        "end_lap": 46
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 47,
+                        "end_lap": 62
+                    }
+                ],
+                "BEA": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 23
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 24,
+                        "end_lap": 62
+                    }
+                ],
+                "SAI": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 50
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 51,
+                        "end_lap": 61
+                    }
+                ],
+                "HAD": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 20
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 21,
+                        "end_lap": 61
+                    }
+                ],
+                "TSU": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 13
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 14,
+                        "end_lap": 61
+                    }
+                ],
+                "STR": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 38
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 39,
+                        "end_lap": 61
+                    }
+                ],
+                "ALB": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 42
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 43,
+                        "end_lap": 61
+                    }
+                ],
+                "LAW": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 48
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 49,
+                        "end_lap": 61
+                    }
+                ],
+                "COL": [
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 1,
+                        "end_lap": 14
+                    },
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 15,
+                        "end_lap": 61
+                    }
+                ],
+                "BOR": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 13
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 14,
+                        "end_lap": 61
+                    }
+                ],
+                "OCO": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 30
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 31,
+                        "end_lap": 61
+                    }
+                ],
+                "GAS": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 24
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 25,
+                        "end_lap": 51
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 52,
+                        "end_lap": 61
+                    }
+                ],
+                "HUL": [
+                    {
+                        "compound": "MEDIUM",
+                        "start_lap": 1,
+                        "end_lap": 25
+                    },
+                    {
+                        "compound": "HARD",
+                        "start_lap": 26,
+                        "end_lap": 44
+                    },
+                    {
+                        "compound": "SOFT",
+                        "start_lap": 45,
+                        "end_lap": 61
+                    }
+                ]
+            }
+        }
+    },
+    "failed_years": {}
+}

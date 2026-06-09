@@ -11,6 +11,8 @@ from tkinter import StringVar, Tk, font, messagebox, ttk
 from preloaded_visualizations.Tire_Strats import show_tire_strats, write_to_file
 from preloaded_visualizations.LapTimes import show_lap_time_data
 from preloaded_visualizations.Laptime_Distribution import show_dist_data
+from preloaded_visualizations.Driver_Comparision import show_comparison_data
+from preloaded_visualizations.Track_Map import show_track
 
 import fastf1
 
@@ -149,7 +151,7 @@ class F1StrategySimGUI:
         self.add_centered_button(
             "View Tire Strategies",
             relx=0.38,
-            rely=0.28,
+            rely=0.30,
             command=lambda: self.show_session_form(
                 "View Tire Strategies",
                 self.view_tire_strategies,
@@ -157,15 +159,15 @@ class F1StrategySimGUI:
         )
         self.add_centered_button(
             "Load Tire Strategies",
-            relx=0.6,
-            rely=0.28,
+            relx=0.62,
+            rely=0.30,
             command=self.show_tire_strategy_loader,
         )
 
         self.add_centered_button(
             "View Lap Times For Driver",
             relx=0.38,
-            rely=0.33,
+            rely=0.40,
             command=lambda: self.show_session_form(
                 "View Lap Times For Driver",
                 self.view_driver_lap_times,
@@ -175,12 +177,33 @@ class F1StrategySimGUI:
 
         self.add_centered_button(
             "View Lap Time Distribution",
-            relx=.6,
-            rely=.33,
+            relx=0.62,
+            rely=0.40,
             command=lambda: self.show_session_form(
                 "View Lap Time Distribution",
                 self.view_lap_time_distribution,
                 mult_drivers=True,
+            )
+        )
+
+        self.add_centered_button(
+            "View Driver Comparison",
+            relx=0.38,
+            rely=0.50,
+            command=lambda: self.show_session_form(
+                "View Driver Comparison",
+                self.view_driver_comparison,
+                mult_drivers=True,
+            )
+        )
+
+        self.add_centered_button(
+            "View Track Map",
+            relx=0.62,
+            rely=0.50,
+            command=lambda: self.show_session_form(
+                "View Track Map",
+                self.view_track,
             )
         )
 
@@ -283,7 +306,7 @@ class F1StrategySimGUI:
         )
 
     def show_tire_strategy_loader(self):
-        """Collect a race location and cache every strategy from 2011-2025."""
+        """Collect a race location and cache every strategy from 2018-2025."""
         self.clear_screen()
         self.add_back_button(self.show_data_menu)
 
@@ -294,7 +317,7 @@ class F1StrategySimGUI:
         )
 
         self.add_centered_label(
-            "This loads race strategies from 2011 through 2025.",
+            "This loads race strategies from 2018 through 2025.",
             relx=0.5,
             rely=0.34,
         )
@@ -391,8 +414,54 @@ class F1StrategySimGUI:
             success_message=None,
         )
 
+    def view_driver_comparison(
+        self,
+        year_entry,
+        location_entry,
+        session_entry,
+        selected_drivers,
+    ):
+        """Look at the lap by lap comparison of selected drivers."""
+        try:
+            year = self.read_year(year_entry)
+            location = self.read_required_text(location_entry, "Location")
+            session_type = self.read_required_text(session_entry, "Session")
+        except ValueError as error:
+            messagebox.showerror("Invalid input", str(error))
+            return
+
+        if not selected_drivers:
+            messagebox.showerror("Invalid input", "Please select at least one driver.")
+            return
+
+        self.run_plot(
+            lambda: show_comparison_data(selected_drivers, year, location, session_type),
+            success_message=None,
+        )
+
+    def view_track(
+        self,
+        year_entry,
+        location_entry,
+        session_entry,
+        driver_entry=None,
+    ):
+        """Makes a map of the track user wants to see with corners numbered"""
+        try:
+            year = self.read_year(year_entry)
+            location = self.read_required_text(location_entry, "Location")
+            session_type = self.read_required_text(session_entry, "Session")
+        except ValueError as error:
+            messagebox.showerror("Invalid input", str(error))
+            return
+
+        self.run_plot(
+            lambda: show_track(year, location, session_type),
+            success_message=None,
+        )
+
     def load_tire_strategies(self, location_entry):
-        """Download and cache tire-strategy data for one race, 2011-2025."""
+        """Download and cache tire-strategy data for one race, 2018-2025."""
         try:
             location = self.read_required_text(location_entry, "Location")
         except ValueError as error:
