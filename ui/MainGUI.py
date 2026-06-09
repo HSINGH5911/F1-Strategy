@@ -6,14 +6,17 @@ helpers in ``preloaded_visualizations``.
 """
 
 from pathlib import Path
-from tkinter import Tk, font, messagebox, ttk
+from tkinter import StringVar, Tk, font, messagebox, ttk
 
 from preloaded_visualizations.Tire_Strats import show_tire_strats, write_to_file
+from preloaded_visualizations.LapTimes import show_lap_time_data
+from preloaded_visualizations.Laptime_Distribution import show_dist_data
 
+import fastf1
 
 APP_TITLE = "F1 Strategy Sim"
 WINDOW_SIZE = "800x600"
-FIRST_FASTF1_YEAR = 2011
+FIRST_FASTF1_YEAR = 2018
 LAST_STRATEGY_LOAD_YEAR = 2025
 
 
@@ -62,6 +65,30 @@ class F1StrategySimGUI:
         entry.place(relx=0.39, rely=rely, anchor="w")
         return entry
 
+    def add_labeled_dropdown(self, dropdown_text, rely, drivers, width=16):
+        """Add a label/dropdown row and return (combobox, selected_drivers list)."""
+        selected_label_var = StringVar(value="Selected Drivers: none")
+        selected_label = ttk.Label(self.main_frame, textvariable=selected_label_var)
+        selected_label.place(relx=0.5, rely=rely + 0.07, anchor="center")
+
+        selected_drivers = []
+
+        def on_select(event):
+            driver = combo.get()
+            if driver and driver not in selected_drivers:
+                selected_drivers.append(driver)
+            selected_label_var.set("Selected Drivers: " + ", ".join(selected_drivers))
+
+        label = ttk.Label(self.main_frame, text=dropdown_text)
+        label.place(relx=0.36, rely=rely, anchor="e")
+
+        combo = ttk.Combobox(self.main_frame, values=drivers, width=width)
+        combo.place(relx=0.39, rely=rely, anchor="w")
+        combo.set("Pick a driver")
+        combo.bind("<<ComboboxSelected>>", on_select)
+
+        return combo, selected_drivers
+
     def add_back_button(self, command):
         """Add a consistent back button in the upper-left corner."""
         button = ttk.Button(self.main_frame, text="Back", command=command)
@@ -106,47 +133,152 @@ class F1StrategySimGUI:
         self.clear_screen()
         self.add_back_button(self.show_welcome_screen)
 
+        ts_font = font.Font(
+            family="Times New Roman",
+            size=18,
+            weight="bold"
+        )
+
         self.add_centered_label(
             "What data do you want to see?",
             relx=0.5,
             rely=0.2,
+            font=ts_font,
         )
+
         self.add_centered_button(
             "View Tire Strategies",
-            relx=0.5,
-            rely=0.35,
-            command=self.show_tire_strategy_form,
+            relx=0.38,
+            rely=0.28,
+            command=lambda: self.show_session_form(
+                "View Tire Strategies",
+                self.view_tire_strategies,
+            ),
         )
         self.add_centered_button(
             "Load Tire Strategies",
-            relx=0.5,
-            rely=0.45,
+            relx=0.6,
+            rely=0.28,
             command=self.show_tire_strategy_loader,
         )
 
-    def show_tire_strategy_form(self):
-        """Collect the session details needed to plot tire strategies."""
+        self.add_centered_button(
+            "View Lap Times For Driver",
+            relx=0.38,
+            rely=0.33,
+            command=lambda: self.show_session_form(
+                "View Lap Times For Driver",
+                self.view_driver_lap_times,
+                include_driver=True,
+            ),
+        )
+
+        self.add_centered_button(
+            "View Lap Time Distribution",
+            relx=.6,
+            rely=.33,
+            command=lambda: self.show_session_form(
+                "View Lap Time Distribution",
+                self.view_lap_time_distribution,
+                mult_drivers=True,
+            )
+        )
+
+    def show_session_form(self, title, submit_callback, include_driver=False, mult_drivers=False):
+        """Collect session details and submit them to the requested action."""
         self.clear_screen()
         self.add_back_button(self.show_data_menu)
 
         self.add_centered_label(
-            "View Tire Strategies",
+            text=title,
             relx=0.5,
             rely=0.2,
         )
 
-        year_entry = self.add_labeled_entry("Year", rely=0.35)
-        location_entry = self.add_labeled_entry("Location", rely=0.45)
-        session_entry = self.add_labeled_entry("Session", rely=0.55)
+        driver_entry = None
+        year_rely = 0.35
+        location_rely = 0.45
+        session_rely = 0.55
+        submit_rely = 0.68
+
+        if include_driver:
+            driver_entry = self.add_labeled_entry("Driver", rely=0.34)
+            year_rely = 0.42
+            location_rely = 0.5
+            session_rely = 0.58
+            submit_rely = 0.72
+
+        if mult_drivers:
+            year_rely = 0.42
+            location_rely = 0.5
+            session_rely = 0.58
+            submit_rely = 0.80
+
+        year_entry = self.add_labeled_entry("Year", rely=year_rely)
+        location_entry = self.add_labeled_entry("Location", rely=location_rely)
+        session_entry = self.add_labeled_entry("Session", rely=session_rely)
+
+        if mult_drivers:
+            # Driver dropdown is shown after the user fills in session info
+            # and clicks "Load Drivers", since we need a valid session to fetch
+            # the driver list.
+            drivers_state = {"combo": None, "selected": []}
+
+            def load_drivers():
+                try:
+                    year = self.read_year(year_entry)
+                    location = self.read_required_text(location_entry, "Location")
+                    session_type = self.read_required_text(session_entry, "Session")
+                except ValueError as error:
+                    messagebox.showerror("Invalid input", str(error))
+                    return
+
+                try:
+                    race = fastf1.get_session(year, location, session_type)
+                    race.load(laps=False, telemetry=False, weather=False, messages=False)
+                    drivers = [
+                        race.get_driver(d)["Abbreviation"]
+                        for d in race.drivers
+                    ]
+                except Exception as error:
+                    messagebox.showerror("Failed to load session", str(error))
+                    return
+
+                combo, selected = self.add_labeled_dropdown(
+                    "Select Drivers", rely=0.70, drivers=drivers
+                )
+                drivers_state["combo"] = combo
+                drivers_state["selected"] = selected
+
+            self.add_centered_button(
+                "Load Drivers",
+                relx=0.5,
+                rely=0.66,
+                command=load_drivers,
+            )
+
+            self.add_centered_button(
+                "Submit",
+                relx=0.5,
+                rely=submit_rely,
+                command=lambda: submit_callback(
+                    year_entry,
+                    location_entry,
+                    session_entry,
+                    drivers_state["selected"],
+                ),
+            )
+            return
 
         self.add_centered_button(
             "Submit",
             relx=0.5,
-            rely=0.68,
-            command=lambda: self.view_tire_strategies(
+            rely=submit_rely,
+            command=lambda: submit_callback(
                 year_entry,
                 location_entry,
                 session_entry,
+                driver_entry,
             ),
         )
 
@@ -191,7 +323,13 @@ class F1StrategySimGUI:
     # Button callbacks
     # ------------------------------------------------------------------
 
-    def view_tire_strategies(self, year_entry, location_entry, session_entry):
+    def view_tire_strategies(
+        self,
+        year_entry,
+        location_entry,
+        session_entry,
+        driver_entry=None,
+    ):
         """Validate the tire-strategy form and open the requested plot."""
         try:
             year = self.read_year(year_entry)
@@ -203,6 +341,53 @@ class F1StrategySimGUI:
 
         self.run_plot(
             lambda: show_tire_strats(year, location, session_type),
+            success_message=None,
+        )
+
+    def view_driver_lap_times(
+        self,
+        year_entry,
+        location_entry,
+        session_entry,
+        driver_entry,
+    ):
+        """Validate the lap-time form and open the driver lap-time plot."""
+        try:
+            driver = self.read_required_text(driver_entry, "Driver").upper()
+            year = self.read_year(year_entry)
+            location = self.read_required_text(location_entry, "Location")
+            session_type = self.read_required_text(session_entry, "Session")
+        except ValueError as error:
+            messagebox.showerror("Invalid input", str(error))
+            return
+
+        self.run_plot(
+            lambda: show_lap_time_data(driver, year, location, session_type),
+            success_message=None,
+        )
+
+    def view_lap_time_distribution(
+        self,
+        year_entry,
+        location_entry,
+        session_entry,
+        selected_drivers,
+    ):
+        """Validate the lap-time distribution form and open the comparison plot."""
+        try:
+            year = self.read_year(year_entry)
+            location = self.read_required_text(location_entry, "Location")
+            session_type = self.read_required_text(session_entry, "Session")
+        except ValueError as error:
+            messagebox.showerror("Invalid input", str(error))
+            return
+
+        if not selected_drivers:
+            messagebox.showerror("Invalid input", "Please select at least one driver.")
+            return
+
+        self.run_plot(
+            lambda: show_dist_data(selected_drivers, year, location, session_type),
             success_message=None,
         )
 

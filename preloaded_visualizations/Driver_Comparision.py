@@ -36,3 +36,9 @@ def show_comparison_data(drivers, year, location, session_type):
     plotting.add_sorted_driver_legend(ax, session)
 
     plt.show()
+
+def main(drives, year, location, session_type):
+    show_comparison_data(drives, year, location, session_type)
+
+if __name__ == '__main__':
+    show_comparison_data(["HAM", "VER"], 2023, "Monaco", "R")

@@ -12,11 +12,10 @@ def show_dist_data(drivers, year, location, type):
     race = fastf1.get_session(year, location, type)
     race.load()
 
-    point_finishers = drivers
-    driver_laps = race.laps.pick_drivers(point_finishers).pick_quicklaps()
+    driver_laps = race.laps.pick_drivers(drivers).pick_quicklaps()
     driver_laps = driver_laps.reset_index()
 
-    finishing_order = [race.get_driver(i)["Abbreviation"] for i in point_finishers]
+    finishing_order = [race.get_driver(i)["Abbreviation"] for i in drivers]
 
     fig, ax = plt.subplots(figsize=(10, 5))
 
@@ -45,8 +44,14 @@ def show_dist_data(drivers, year, location, type):
 
     ax.set_xlabel("Driver")
     ax.set_ylabel("Lap Time (s)")
-    plt.suptitle("2023 Azerbaijan Grand Prix Lap Time Distributions")
+    plt.suptitle(str(year) + " "  + location  + " Grand Prix Time Distributions")
     sns.despine(left=True, bottom=True)
 
     plt.tight_layout()
     plt.show()
+
+def main(drives, year, location, type):
+    show_dist_data(drives, year, location, type)
+
+if __name__ == "__main__":
+    show_dist_data(["HAM", "VER"], 2025, "Monaco", "R")

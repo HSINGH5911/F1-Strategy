@@ -37,8 +37,13 @@ def show_lap_time_data(driver, year, location, session_type):
     plt.grid(color='w', which='major', axis='both')
     sns.despine(left=True, bottom=True)
 
+    print(driver_laps)
     plt.tight_layout()
     plt.show()
 
+
+def main(driver, year, location, session_type):
+    show_lap_time_data(driver, year, location, session_type)
+
 if __name__ == '__main__':
-    show_lap_time_data("HAM", 2023, "Monaco", "R")
+    show_lap_time_data("HAM", 2023, "Abu Dhabi", "R")
