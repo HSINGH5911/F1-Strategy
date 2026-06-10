@@ -10,7 +10,10 @@ def tire_wear(driver, track):
     return tire_data['wear_rate'] * track["tire_stress"]
 
 def update_tire_distance(driver, track):
-    driver.tire_distance += track["length_km"]
+    # Apply a per-driver wear factor and a small per-lap noise term
+    wear = getattr(driver, "wear_factor", 1.0)
+    noise = __import__("random").uniform(0.95, 1.05)
+    driver.tire_distance += track["length_km"] * wear * noise
 
 def degradation_penalty(driver):
     tire_data = get_tire_data(driver)

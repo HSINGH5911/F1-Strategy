@@ -65,7 +65,7 @@ def process_pit_stops(drivers, track, race_state):
         laps_remaining = race_state.laps_remaining
 
         car_ahead = drivers[i - 1] if i > 0 else None
-        car_behind = drivers[i + 1] if i < len(drivers) else None
+        car_behind = drivers[i + 1] if i < len(drivers) - 1 else None
 
         # Pitting due to tire reached max possible distance
         if driver.tire_distance >= tire_data["max_distance"]:
@@ -167,6 +167,7 @@ def race_laps(track):
 
 def simulate_race(drivers, track, race_state, history=None):
     total_laps = race_laps(track)
+    race_state.laps_remaining = total_laps - race_state.current_lap + 1
 
     while race_state.current_lap <= total_laps:
         simulate_lap(drivers, track, race_state, total_laps)
@@ -182,3 +183,5 @@ def simulate_race(drivers, track, race_state, history=None):
         record_history(history, race_state, drivers)
 
         race_state.current_lap += 1
+        race_state.laps_remaining = max(0, total_laps - race_state.current_lap + 1)
+

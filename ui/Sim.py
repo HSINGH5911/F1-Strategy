@@ -1,7 +1,12 @@
 import math
+import os
+import sys
 import tkinter as tk
 import random
 import threading
+
+# Ensure the project root is on sys.path when running ui/Sim.py directly.
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tkinter import ttk, messagebox
 
@@ -50,10 +55,15 @@ def create_grid():
         driver.wet_skill = data["wet_skill"]
         driver.consistency = data["consistency"]
         driver.aggression = data["aggression"]
+        # give drivers slightly different starting compounds and wear behavior
+        driver.current_compound = random.choices(["SOFT", "MEDIUM", "HARD"], weights=[0.2, 0.6, 0.2])[0]
+        # wear_factor: >1 means faster wear, <1 means better preservation
+        driver.wear_factor = max(0.75, min(1.3, 1.0 + (1.0 - driver.tire_management) * 0.6 + random.gauss(0, 0.03)))
         drivers.append(driver)
 
-        noise = random.gauss(0, 0.8)
-        driver.position = max(1, driver.position + round(noise))
+    random.shuffle(drivers)
+    for pos, driver in enumerate(drivers, start=1):
+        driver.position = pos
 
     return drivers
 
