@@ -1,7 +1,9 @@
 import math
 import tkinter as tk
-from tkinter import ttk, messagebox
+import random
 import threading
+
+from tkinter import ttk, messagebox
 
 from models.driver import Driver
 from models.team import Team
@@ -36,7 +38,9 @@ def create_grid():
         )
         for name, data in TEAMS.items()
     }
+
     drivers = []
+
     for code, data in DRIVERS.items():
         driver = Driver(code, teams[data["team"]])
         driver.skill = data["skill"]
@@ -47,6 +51,10 @@ def create_grid():
         driver.consistency = data["consistency"]
         driver.aggression = data["aggression"]
         drivers.append(driver)
+
+        noise = random.gauss(0, 0.8)
+        driver.position = max(1, driver.position + round(noise))
+
     return drivers
 
 
