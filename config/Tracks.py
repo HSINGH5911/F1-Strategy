@@ -15,7 +15,9 @@ TRACKS = {
         "rain_probability": 0.35,
         "virtual_sc_chance": 0.22,
         "drs_zones": 4,
-        "avg_temp": 24
+        "avg_temp": 24,
+
+        "reccommended_pit_stops": 1
     },
 
     "China": {
@@ -34,7 +36,9 @@ TRACKS = {
         "rain_probability": 0.28,
         "virtual_sc_chance": 0.16,
         "drs_zones": 2,
-        "avg_temp": 21
+        "avg_temp": 21,
+
+        "reccommended_pit_stops": 1.5
     },
 
     "Japan": {
@@ -53,7 +57,9 @@ TRACKS = {
         "rain_probability": 0.30,
         "virtual_sc_chance": 0.12,
         "drs_zones": 1,
-        "avg_temp": 18
+        "avg_temp": 18,
+
+        "reccommended_pit_stops": 1
     },
 
     "Bahrain": {
@@ -72,7 +78,9 @@ TRACKS = {
         "rain_probability": 0.01,
         "virtual_sc_chance": 0.18,
         "drs_zones": 3,
-        "avg_temp": 31
+        "avg_temp": 31,
+
+        "reccommended_pit_stops": 2
     },
 
     "Saudi Arabia": {
@@ -91,7 +99,9 @@ TRACKS = {
         "rain_probability": 0.01,
         "virtual_sc_chance": 0.40,
         "drs_zones": 3,
-        "avg_temp": 29
+        "avg_temp": 29,
+
+        "reccommended_pit_stops": 1
     },
 
     "Miami": {
@@ -110,7 +120,9 @@ TRACKS = {
         "rain_probability": 0.42,
         "virtual_sc_chance": 0.20,
         "drs_zones": 3,
-        "avg_temp": 30
+        "avg_temp": 30,
+
+        "reccommended_pit_stops": 1
     },
 
     "Emilia Romagna": {
@@ -129,7 +141,9 @@ TRACKS = {
         "rain_probability": 0.32,
         "virtual_sc_chance": 0.14,
         "drs_zones": 1,
-        "avg_temp": 22
+        "avg_temp": 22,
+
+        "reccommended_pit_stops": 1
     },
 
     "Monaco": {
@@ -148,7 +162,9 @@ TRACKS = {
         "rain_probability": 0.20,
         "virtual_sc_chance": 0.45,
         "drs_zones": 1,
-        "avg_temp": 23
+        "avg_temp": 23,
+
+        "reccommended_pit_stops": 2
     },
 
 
@@ -168,7 +184,9 @@ TRACKS = {
         "rain_probability": 0.12,
         "virtual_sc_chance": 0.10,
         "drs_zones": 2,
-        "avg_temp": 28
+        "avg_temp": 28,
+
+        "reccommended_pit_stops": 2
     },
 
     "Canada": {
@@ -187,7 +205,9 @@ TRACKS = {
         "rain_probability": 0.38,
         "virtual_sc_chance": 0.32,
         "drs_zones": 3,
-        "avg_temp": 22
+        "avg_temp": 22,
+
+        "reccommended_pit_stops": 1.5
     },
 
     "Austria": {
@@ -206,7 +226,9 @@ TRACKS = {
         "rain_probability": 0.35,
         "virtual_sc_chance": 0.14,
         "drs_zones": 3,
-        "avg_temp": 24
+        "avg_temp": 24,
+
+        "reccommended_pit_stops": 2
     },
 
     "Great Britain": {
@@ -225,7 +247,9 @@ TRACKS = {
         "rain_probability": 0.48,
         "virtual_sc_chance": 0.18,
         "drs_zones": 2,
-        "avg_temp": 20
+        "avg_temp": 20,
+
+        "reccommended_pit_stops": 1.5
     },
 
     "Belgium": {
@@ -244,7 +268,9 @@ TRACKS = {
         "rain_probability": 0.55,
         "virtual_sc_chance": 0.24,
         "drs_zones": 2,
-        "avg_temp": 19
+        "avg_temp": 19,
+
+        "reccommended_pit_stops": 1
     },
 
     "Hungary": {
@@ -263,7 +289,9 @@ TRACKS = {
         "rain_probability": 0.30,
         "virtual_sc_chance": 0.20,
         "drs_zones": 2,
-        "avg_temp": 29
+        "avg_temp": 29,
+
+        "reccommended_pit_stops": 2
     },
 
     "Netherlands": {
@@ -282,7 +310,9 @@ TRACKS = {
         "rain_probability": 0.42,
         "virtual_sc_chance": 0.15,
         "drs_zones": 2,
-        "avg_temp": 21
+        "avg_temp": 21,
+
+        "reccommended_pit_stops": 1.5
     },
 
     "Italy": {
@@ -301,7 +331,9 @@ TRACKS = {
         "rain_probability": 0.22,
         "virtual_sc_chance": 0.12,
         "drs_zones": 2,
-        "avg_temp": 27
+        "avg_temp": 27,
+
+        "reccommended_pit_stops": 1
     },
 
     "Azerbaijan": {
@@ -320,7 +352,9 @@ TRACKS = {
         "rain_probability": 0.18,
         "virtual_sc_chance": 0.35,
         "drs_zones": 2,
-        "avg_temp": 26
+        "avg_temp": 26,
+
+        "reccommended_pit_stops": 1
     },
 
     "Singapore": {
@@ -339,7 +373,9 @@ TRACKS = {
         "rain_probability": 0.68,
         "virtual_sc_chance": 0.50,
         "drs_zones": 4,
-        "avg_temp": 30
+        "avg_temp": 30,
+
+        "reccommended_pit_stops": 2
     },
 
     "United States": {
@@ -358,7 +394,9 @@ TRACKS = {
         "rain_probability": 0.25,
         "virtual_sc_chance": 0.18,
         "drs_zones": 2,
-        "avg_temp": 27
+        "avg_temp": 27,
+
+        "reccommended_pit_stops": 1.5
     },
 
     "Mexico": {
@@ -377,7 +415,9 @@ TRACKS = {
         "rain_probability": 0.18,
         "virtual_sc_chance": 0.24,
         "drs_zones": 3,
-        "avg_temp": 24
+        "avg_temp": 24,
+
+        "reccommended_pit_stops": 1
     },
 
     "Brazil": {
@@ -396,7 +436,9 @@ TRACKS = {
         "rain_probability": 0.58,
         "virtual_sc_chance": 0.30,
         "drs_zones": 2,
-        "avg_temp": 26
+        "avg_temp": 26,
+
+        "reccommended_pit_stops": 1.5
     },
 
     "Las Vegas": {
@@ -415,7 +457,9 @@ TRACKS = {
         "rain_probability": 0.02,
         "virtual_sc_chance": 0.28,
         "drs_zones": 2,
-        "avg_temp": 17
+        "avg_temp": 17,
+
+        "reccommended_pit_stops": 1
     },
 
     "Qatar": {
@@ -434,7 +478,9 @@ TRACKS = {
         "rain_probability": 0.01,
         "virtual_sc_chance": 0.10,
         "drs_zones": 1,
-        "avg_temp": 33
+        "avg_temp": 33,
+
+        "reccommended_pit_stops": 2
     },
 
     "Abu Dhabi": {
@@ -453,6 +499,8 @@ TRACKS = {
         "rain_probability": 0.01,
         "virtual_sc_chance": 0.12,
         "drs_zones": 2,
-        "avg_temp": 29
+        "avg_temp": 29,
+
+        "reccommended_pit_stops": 1
     }
 }

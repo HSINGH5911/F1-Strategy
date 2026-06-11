@@ -3,6 +3,7 @@ import random
 
 from config.General import DEFAULT_RACE_DISTANCE_KM, MONACO_RACE_DISTANCE_KM
 from config.Tires import TIRES
+from config.Tracks import TRACKS
 from simulation.lap_time_model import calc_lap_time
 from simulation.degredation_model import update_tire_distance
 from simulation.overtakes import attempt_overtake, swap_pos
@@ -75,6 +76,7 @@ def process_pit_stops(drivers, track, race_state):
                 pick_compound(laps_remaining, track, race_state),
                 race_state
             )
+            driver.pit_stops += 1
             continue
 
         # Undercut -> We are faster than ahead car. Pit now and jummp them
@@ -85,6 +87,7 @@ def process_pit_stops(drivers, track, race_state):
             if delta > 0.3 and gap < track["pit_delta"] * 0.6:
                 if random.random() < 0.65:
                     perform_stop(driver, track, "SOFT", race_state)
+                    driver.pit_stops += 1
                     continue
 
         # Overcut -> Car behind is faster. Stay out and build gap
@@ -106,6 +109,7 @@ def process_pit_stops(drivers, track, race_state):
                     pick_compound(laps_remaining, track, race_state),
                     race_state
                 )
+                driver.pit_stops += 1
                 continue
 
         # Free stop under safety car
@@ -117,6 +121,7 @@ def process_pit_stops(drivers, track, race_state):
                     pick_compound(laps_remaining, track, race_state),
                     race_state
                 )
+                driver.pit_stops += 1
 
 def pick_compound(laps_left, track, race_state):
     """Method to pick the compound to use for the race after pitting"""

@@ -1,4 +1,5 @@
 import math
+
 import os
 import sys
 import tkinter as tk
@@ -128,6 +129,8 @@ def simulate_race_with_strategy(drivers, track, race_state, history, plan: Strat
 
     total_laps = race_laps(track)
     player_driver = next((d for d in drivers if d.code == player_code), None)
+    required_stops = track["reccommended_pit_stops"]
+    
 
     while race_state.current_lap <= total_laps:
         simulate_lap(drivers, track, race_state, total_laps)
@@ -289,7 +292,10 @@ class StrategyGUI(tk.Tk):
     # ── Strategy panel ────────────────────────
 
     def _build_strategy_panel(self, parent):
-        f = self._section(parent, "Pit Stop Strategy")
+        f = self._section(
+            parent, 
+            "Pit Stop Strategy"
+        )
 
         # Header row
         hdr = tk.Frame(f, bg="#16213e")
@@ -389,7 +395,7 @@ class StrategyGUI(tk.Tk):
     def _refresh_laps(self):
         track = TRACKS[self.track_var.get()]
         laps = race_laps(track)
-        self.laps_label.config(text=f"{laps} laps · {track['length_km']} km · pit Δ {track['pit_delta']}s")
+        self.laps_label.config(text=f"{laps} laps · {track['length_km']} km · pit Δ {track['pit_delta']}s · rec. stops: {track['reccommended_pit_stops']}")
         self._redraw_stint_preview()
 
     def _add_stop(self):
