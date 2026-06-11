@@ -16,6 +16,7 @@ class Driver:
         self.dnf = False
         self.fastest_lap = None
         self.last_lap_time = None
+        self.laps_since_last_pit = 0
 
     def pitted(self):
         self.pit_stops += 1

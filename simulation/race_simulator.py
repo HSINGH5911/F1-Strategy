@@ -44,6 +44,8 @@ def simulate_lap(drivers, track, race_state, total_laps):
         if driver.dnf and random.random() < 0.6:
             race_state.safety_car = True
             race_state.sc_laps_remaining = random.randint(3, 6)
+        
+        driver.laps_since_last_pit += 1
 
 
 def update_positions(drivers):
@@ -102,6 +104,11 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
     pit_stop_amount = get_num__rec_pit_stops(track)
     pit_window = get_pit_window(track)
 
+    near_window = any(
+        abs(race_state.current_lap - lap) <= 3
+        for lap in pit_window
+    )
+
     if skip_codes is None:
         skip_codes = set()
 
@@ -109,6 +116,9 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
         # skip drivers explicitly requested (e.g., player when using external strategy)
         if driver.code in skip_codes:
             continue
+
+        laps_since_pit = driver.laps_since_last_pit
+
         tire_data = TIRES[driver.current_compound]
         laps_remaining = race_state.laps_remaining
 
@@ -141,7 +151,7 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                 )
 
         # Undercut -> We are faster than ahead car. Pit now and jummp them
-        if car_ahead:
+        if car_ahead and laps_since_pit > 10 and near_window:
             delta = pace_delta(driver, car_ahead)
             gap = driver.race_time - car_ahead.race_time
 
@@ -151,7 +161,7 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                     continue
 
         # Overcut -> Car behind is faster. Stay out and build gap
-        if car_behind:
+        if car_behind and laps_since_pit > 10 and near_window:
             delta = pace_delta(car_behind, driver)
             gap = car_behind.race_time - driver.race_time
 
@@ -160,7 +170,7 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                 continue
 
         # Car in front is pitting -> Mirror only if we aren't significantly faster
-        if car_ahead and car_ahead.pit_stops > driver.pit_stops:
+        if car_ahead and car_ahead.pit_stops > driver.pit_stops and near_window and laps_since_pit > 10:
             delta = pace_delta(driver, car_ahead)
             if delta < 0.5 and random.random() < 0.55:
                 perform_stop(
