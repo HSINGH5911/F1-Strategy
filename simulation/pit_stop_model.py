@@ -13,11 +13,13 @@ def total_pit_loss(driver, track, race_state):
 def change_compound(driver, new_compound):
     driver.current_compound = new_compound
     driver.tire_distance = 0
-    driver.pit_stops += 1
+    # do not modify pit_stops here; counting should be done by perform_stop
 
 def perform_stop(driver, track, new_compound, race_state):
     driver.race_time += total_pit_loss(driver, track, race_state)
     change_compound(driver, new_compound)
+    # count this completed pit stop
+    driver.pit_stops += 1
 
 def pit_error():
     if random.random() < .01:

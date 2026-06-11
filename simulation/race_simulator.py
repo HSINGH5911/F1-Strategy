@@ -11,6 +11,16 @@ from simulation.pit_stop_model import perform_stop
 from simulation.overtakes import pace_delta
 from data.random_weather import update_weather as update_track_wetness, weather_state
 
+
+def race_laps(track):
+    from config.General import DEFAULT_RACE_DISTANCE_KM, MONACO_RACE_DISTANCE_KM
+    race_distance = (
+        MONACO_RACE_DISTANCE_KM
+        if track.get("name") == "Monaco"
+        else DEFAULT_RACE_DISTANCE_KM
+    )
+    return track.get("laps", math.ceil(race_distance / track["length_km"]))
+
 def simulate_lap(drivers, track, race_state, total_laps):
     for driver in drivers:
         lap_time = calc_lap_time(driver, track, race_state)
@@ -59,14 +69,56 @@ def process_overtakes(drivers, track):
         if attempt_overtake(attacker, defender, gap, track):
             swap_pos(attacker, defender)
 
+def get_num__rec_pit_stops(track):
+    pit_stop_amount = track["reccommended_pit_stops"]
 
-def process_pit_stops(drivers, track, race_state):
+    if pit_stop_amount == 1.5:
+        # Randomly decide if we want 1 or 2 stops for this
+        pit_stop_amount = 1 if random.random() < 0.5 else 2
+
+    return pit_stop_amount
+
+def get_pit_window(track):
+    total_laps = race_laps(track)
+
+    pit_stop_amount = get_num__rec_pit_stops(track)
+
+    if pit_stop_amount == 1:
+        pit_window = [total_laps // 2]
+    elif pit_stop_amount == 2:
+        pit_window = [
+            total_laps // 3,
+            (2 * total_laps) // 3
+        ]
+    else:
+        pit_window = []
+
+    return pit_window
+
+def process_pit_stops(drivers, track, race_state, skip_codes=None):
+    total_laps = race_laps(track)
+    current_lap = race_state.current_lap
+
+    pit_stop_amount = get_num__rec_pit_stops(track)
+    pit_window = get_pit_window(track)
+
+    if skip_codes is None:
+        skip_codes = set()
+
     for i, driver in enumerate(drivers):
+        # skip drivers explicitly requested (e.g., player when using external strategy)
+        if driver.code in skip_codes:
+            continue
         tire_data = TIRES[driver.current_compound]
         laps_remaining = race_state.laps_remaining
 
         car_ahead = drivers[i - 1] if i > 0 else None
         car_behind = drivers[i + 1] if i < len(drivers) - 1 else None
+
+        target_stops_by_now = sum(
+            1 for lap in pit_window
+            if current_lap >= lap
+        )
 
         # Pitting due to tire reached max possible distance
         if driver.tire_distance >= tire_data["max_distance"]:
@@ -76,8 +128,17 @@ def process_pit_stops(drivers, track, race_state):
                 pick_compound(laps_remaining, track, race_state),
                 race_state
             )
-            driver.pit_stops += 1
             continue
+
+        # Pit for 2 stop strat and the tires are starting to struggle in the second stint
+        if driver.pit_stops < target_stops_by_now:
+            if driver.tire_distance > tire_data["max_distance"] * 0.6:
+                perform_stop(
+                    driver,
+                    track,
+                    pick_compound(laps_remaining, track, race_state),
+                    race_state
+                )
 
         # Undercut -> We are faster than ahead car. Pit now and jummp them
         if car_ahead:
@@ -87,7 +148,6 @@ def process_pit_stops(drivers, track, race_state):
             if delta > 0.3 and gap < track["pit_delta"] * 0.6:
                 if random.random() < 0.65:
                     perform_stop(driver, track, "SOFT", race_state)
-                    driver.pit_stops += 1
                     continue
 
         # Overcut -> Car behind is faster. Stay out and build gap
@@ -109,7 +169,6 @@ def process_pit_stops(drivers, track, race_state):
                     pick_compound(laps_remaining, track, race_state),
                     race_state
                 )
-                driver.pit_stops += 1
                 continue
 
         # Free stop under safety car
@@ -121,7 +180,19 @@ def process_pit_stops(drivers, track, race_state):
                     pick_compound(laps_remaining, track, race_state),
                     race_state
                 )
-                driver.pit_stops += 1
+
+        # Forcing pit stop for those who havent stopped yet and we are past the window for 1 stop strategy
+        laps_rem = total_laps - current_lap
+        missing_stops = pit_stop_amount - driver.pit_stops
+
+        if missing_stops > 0 and laps_rem < missing_stops * 5:
+            perform_stop(
+                driver,
+                track,
+                pick_compound(laps_remaining, track, race_state),
+                race_state
+            )
+            continue
 
 def pick_compound(laps_left, track, race_state):
     """Method to pick the compound to use for the race after pitting"""
@@ -153,6 +224,15 @@ def record_history(history, race_state, drivers):
     history.setdefault("laps", []).append(race_state.current_lap)
 
     for driver in drivers:
+        # record cumulative pit counts for change detection
+        prev_counts = history.setdefault("pit_counts", {}).setdefault(driver.code, [])
+        prev = prev_counts[-1] if prev_counts else 0
+        prev_counts.append(driver.pit_stops)
+
+        # if pit count increased this lap, record the lap as a pit
+        if driver.pit_stops > prev:
+            history.setdefault("pit_laps", {}).setdefault(driver.code, []).append(race_state.current_lap)
+
         history.setdefault("positions", {}).setdefault(driver.code, []).append(driver.position)
         history.setdefault("lap_times", {}).setdefault(driver.code, []).append(driver.last_lap_time)
         history.setdefault("tire_distance", {}).setdefault(driver.code, []).append(driver.tire_distance)

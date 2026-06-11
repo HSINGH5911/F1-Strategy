@@ -18,7 +18,7 @@ from config.Tracks import TRACKS
 from config.Teams import TEAMS
 from config.Drivers import DRIVERS
 from config.Tires import TIRES
-from simulation.race_simulator import simulate_race
+from simulation.race_simulator import simulate_race, process_pit_stops, get_num__rec_pit_stops, get_pit_window
 
 from ui.dashboard import (
     print_standings,
@@ -138,17 +138,14 @@ def simulate_race_with_strategy(drivers, track, race_state, history, plan: Strat
         process_overtakes(drivers, track)
 
         # ── Pit stops ──────────────────────────────────────────
-        for driver in drivers:
-            if driver is player_driver and plan.stops:
-                # Player: use the strategy plan
-                scheduled_compound = plan.next_stop_for_lap(race_state.current_lap)
-                if scheduled_compound:
-                    perform_stop(driver, track, scheduled_compound, race_state)
-            else:
-                # AI drivers: keep the automatic degradation logic
-                tire_data = TIRES[driver.current_compound]
-                if driver.tire_distance >= tire_data["max_distance"]:
-                    perform_stop(driver, track, "HARD", race_state)
+        # Player uses the StrategyPlan; AI drivers use the full pit logic
+        if player_driver and plan.stops:
+            scheduled_compound = plan.next_stop_for_lap(race_state.current_lap)
+            if scheduled_compound:
+                perform_stop(player_driver, track, scheduled_compound, race_state)
+
+        # Process AI pit logic while skipping the player
+        process_pit_stops(drivers, track, race_state, skip_codes={player_driver.code} if player_driver else None)
 
         update_weather(race_state)
         record_history(history, race_state, drivers)
@@ -395,14 +392,25 @@ class StrategyGUI(tk.Tk):
     def _refresh_laps(self):
         track = TRACKS[self.track_var.get()]
         laps = race_laps(track)
-        self.laps_label.config(text=f"{laps} laps · {track['length_km']} km · pit Δ {track['pit_delta']}s · rec. stops: {track['reccommended_pit_stops']}")
+        pit_stop_amount = track["reccommended_pit_stops"]
+
+        if pit_stop_amount == 1.5:
+            pit_text = "1-2"
+        else:
+            pit_text = pit_stop_amount
+
+        self.laps_label.config(text=f"{laps} laps · {track['length_km']} km · pit Δ {track['pit_delta']}s · rec. stops: {pit_text}")
         self._redraw_stint_preview()
 
     def _add_stop(self):
         track = TRACKS[self.track_var.get()]
         total = race_laps(track)
-        default_lap = max(1, total // (len(self._stop_rows) + 2))
-        self._add_stop_row(default_lap, "HARD")
+        pit_stop_amount = get_num__rec_pit_stops(track)
+        pit_window = get_pit_window(track)
+
+        for i in range(pit_stop_amount):
+            self._add_stop_row(pit_window[i], "HARD")
+        
 
     def _add_stop_row(self, lap: int, compound: str):
         track = TRACKS[self.track_var.get()]
@@ -654,6 +662,23 @@ class StrategyGUI(tk.Tk):
                                       fill="white", font=("Helvetica", 7, "bold"))
                     stint_start = i
                     prev_c = comp
+
+            # Draw pit markers (visible even if compound doesn't change)
+            pit_laps = history.get("pit_laps", {}).get(code, [])
+            for pit_lap in pit_laps:
+                try:
+                    lap_num = int(pit_lap)
+
+                except Exception:
+                    continue
+                if lap_num < 1 or lap_num > total_laps:
+                    continue
+                x = pad_left + lap_num / total_laps * chart_w
+                yc = y + (row_h - 6) / 2
+                r = 5
+                fill = "#ffffff"
+                outline = "#000000"
+                c.create_oval(x - r, yc - r, x + r, yc + r, fill=fill, outline=outline)
 
         # Legend
         legend_x = pad_left
