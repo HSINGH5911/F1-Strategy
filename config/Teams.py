@@ -118,5 +118,5 @@ TEAMS = {
         "tire_management": 0.88,
         "drs_efficiency": 0.92,
         "strategy_rating": 0.66
-    }
+    },
 }

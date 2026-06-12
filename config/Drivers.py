@@ -238,5 +238,29 @@ DRIVERS = {
         "wet_skill": 0.83,
         "consistency": 0.84,
         "aggression": 0.91
-    }
+    },
+
+    "PER": {
+        "name": "Sergio Perez",
+        "team": "Cadillac",
+        "skill": 0.89,
+        "qualifying": 0.86,
+        "racecraft": 0.92,
+        "tire_management": 0.95,
+        "wet_skill": 0.89,
+        "consistency": 0.87,
+        "aggression": 0.84
+    },
+
+    "BOT": {
+        "name": "Valtteri Bottas",
+        "team": "Cadillac",
+        "skill": 0.87,
+        "qualifying": 0.91,
+        "racecraft": 0.85,
+        "tire_management": 0.90,
+        "wet_skill": 0.83,
+        "consistency": 0.91,
+        "aggression": 0.70
+    },
 }

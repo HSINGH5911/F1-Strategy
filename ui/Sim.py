@@ -6,6 +6,8 @@ import tkinter as tk
 import random
 import threading
 
+from matplotlib import container
+
 # Ensure the project root is on sys.path when running ui/Sim.py directly.
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -32,8 +34,31 @@ from ui.dashboard import (
 # ─────────────────────────────────────────────
 #  Grid factory
 # ─────────────────────────────────────────────
+def generate_starting_grid(drivers):
+    """Generate a randomized starting grid of drivers based on the DRIVERS config. 
+        Each driver is assigned a position, team, and initial tire compound."""
+    
+    for driver in drivers:
+        qual_score = (
+            driver.qualifying * 100
+            + driver.skill * 50
+            + random.gauss(0, 3)
+        )
+
+        driver.qualifying_score = qual_score
+
+    drivers.sort(
+        key=lambda d: d.qualifying_score,
+        reverse=True
+    )
+    
+    return drivers
 
 def create_grid():
+    """Create the initial grid of drivers for the race. This function initializes the teams and 
+        drivers based on the configuration files, assigns them to their respective teams, 
+        and generates the starting grid positions based on their qualifying scores."""
+    
     teams = {
         name: Team(
             name,
@@ -62,14 +87,14 @@ def create_grid():
         driver.wear_factor = max(0.75, min(1.3, 1.0 + (1.0 - driver.tire_management) * 0.6 + random.gauss(0, 0.03)))
         drivers.append(driver)
 
-    random.shuffle(drivers)
-    for pos, driver in enumerate(drivers, start=1):
-        driver.position = pos
+    generate_starting_grid(drivers)
 
     return drivers
 
 
 def race_laps(track):
+    """Calculate the number of laps for a given track."""
+
     from config.General import DEFAULT_RACE_DISTANCE_KM, MONACO_RACE_DISTANCE_KM
     race_distance = (
         MONACO_RACE_DISTANCE_KM
@@ -159,6 +184,8 @@ def simulate_race_with_strategy(drivers, track, race_state, history, plan: Strat
 # ─────────────────────────────────────────────
 
 def run_console_simulation(track_name="Italy", player_code=None, plan: StrategyPlan = None):
+    """Run a full race simulation in the console, optionally with a player driver and strategy plan."""
+
     track = TRACKS[track_name]
     race_state = RaceState()
     drivers = create_grid()
@@ -202,6 +229,8 @@ COMPOUND_SHORT = {
 
 class StrategyGUI(tk.Tk):
     def __init__(self):
+        """Initialize the main application window, set up the title, size, and background color."""
+
         super().__init__()
         self.title("F1 Race Strategy Planner")
         self.resizable(True, True)
@@ -217,6 +246,9 @@ class StrategyGUI(tk.Tk):
     # ── Layout ────────────────────────────────
 
     def _build_ui(self):
+        """Set up the main layout of the application, including the top bar, main columns, and
+           sections for race setup, strategy planning, and results display."""
+        
         # Top bar
         topbar = tk.Frame(self, bg="#16213e", pady=8)
         topbar.pack(fill="x")
@@ -239,6 +271,8 @@ class StrategyGUI(tk.Tk):
         self._build_results_panel(right)
 
     def _section(self, parent, title):
+        """Helper to create a styled section frame with a title."""
+
         frame = tk.LabelFrame(parent, text=title, fg="#aaaaaa",
                               bg="#16213e", bd=1, relief="flat",
                               font=("Helvetica", 9, "bold"), padx=10, pady=8)
@@ -248,6 +282,9 @@ class StrategyGUI(tk.Tk):
     # ── Setup panel ───────────────────────────
 
     def _build_setup_panel(self, parent):
+        """Create the race setup section, allowing the user to select the track, player driver, 
+            starting compound, and grid position."""
+        
         f = self._section(parent, "Race Setup")
 
         # Track
@@ -289,6 +326,8 @@ class StrategyGUI(tk.Tk):
     # ── Strategy panel ────────────────────────
 
     def _build_strategy_panel(self, parent):
+        """Create the pit stop strategy section, allowing the user to plan their pit stops."""
+
         f = self._section(
             parent, 
             "Pit Stop Strategy"
@@ -337,6 +376,9 @@ class StrategyGUI(tk.Tk):
         self.status_label.pack(anchor="w", pady=(4, 0))
 
     def _build_results_panel(self, parent):
+        """Create the results display section, which uses a notebook to show the standings, 
+            strategy, and race info."""
+        
         self.notebook = ttk.Notebook(parent)
         self.notebook.pack(fill="both", expand=True)
 
@@ -353,6 +395,9 @@ class StrategyGUI(tk.Tk):
         self._build_info_tab()
 
     def _build_standings_tab(self):
+        """Set up the standings tab with a Treeview to display the race results, 
+            including position, driver, team"""
+        
         cols = ("Pos", "Driver", "Team", "Race Time", "Gap", "Fastest Lap", "Pits", "Final Compound")
         self.standings_tree = ttk.Treeview(self.tab_standings, columns=cols,
                                            show="headings", height=20)
@@ -369,10 +414,13 @@ class StrategyGUI(tk.Tk):
 
         self.standings_tree.tag_configure("player", foreground="#00d4ff", font=("Helvetica", 10, "bold"))
         self.standings_tree.tag_configure("podium", foreground="#f1c40f")
-        self.standings_tree.tag_configure("even",   background="#141428")
-        self.standings_tree.tag_configure("odd",    background="#1a1a2e")
-
+        self.standings_tree.tag_configure("even",   background="#141428", foreground="#cccccc")
+        self.standings_tree.tag_configure("odd",    background="#1a1a2e", foreground="#cccccc")
+        
     def _build_strategy_tab(self):
+        """Set up the strategy tab, which currently just has a canvas to visualize the 
+            planned stints and compounds."""
+        
         self.strategy_canvas = tk.Canvas(self.tab_strategy, bg="#1a1a2e",
                                          highlightthickness=0)
         vsb = ttk.Scrollbar(self.tab_strategy, orient="vertical",
@@ -382,6 +430,8 @@ class StrategyGUI(tk.Tk):
         self.strategy_canvas.pack(fill="both", expand=True)
 
     def _build_info_tab(self):
+        """Set up the race info tab with a text widget to display weather and track information."""
+
         self.info_text = tk.Text(self.tab_weather, bg="#0d0d1a", fg="#cccccc",
                                  font=("Courier", 10), state="disabled",
                                  relief="flat", padx=12, pady=10)
@@ -390,6 +440,8 @@ class StrategyGUI(tk.Tk):
     # ── Stop row management ───────────────────
 
     def _refresh_laps(self):
+        """Update the lap count and track info display based on the selected track."""
+
         track = TRACKS[self.track_var.get()]
         laps = race_laps(track)
         pit_stop_amount = track["reccommended_pit_stops"]
@@ -403,6 +455,9 @@ class StrategyGUI(tk.Tk):
         self._redraw_stint_preview()
 
     def _add_stop(self):
+        """Add a new pit stop row to the strategy plan, allowing the user to specify the lap and 
+            compound for the stop."""
+        
         track = TRACKS[self.track_var.get()]
         total = race_laps(track)
         pit_stop_amount = get_num__rec_pit_stops(track)
@@ -413,6 +468,8 @@ class StrategyGUI(tk.Tk):
         
 
     def _add_stop_row(self, lap: int, compound: str):
+        """Helper to add a single stop row with the given lap and compound defaults."""
+        
         track = TRACKS[self.track_var.get()]
         total = race_laps(track)
 
@@ -449,12 +506,18 @@ class StrategyGUI(tk.Tk):
         self._sync_plan()
 
     def _clear_stops(self):
+        """"Remove all planned stops from the strategy plan and clear the UI rows."""
+
         for row in self._stop_rows:
             row["frame"].destroy()
         self._stop_rows.clear()
         self._sync_plan()
 
     def _sync_plan(self):
+        """Sync the StrategyPlan with the current state of the stop rows in the UI. 
+            This reads the lap and compound values from each row and updates the plan 
+            accordingly, then redraws the stint preview."""
+        
         self.plan.clear()
         for row in self._stop_rows:
             try:
@@ -466,6 +529,9 @@ class StrategyGUI(tk.Tk):
         self._redraw_stint_preview()
 
     def _redraw_stint_preview(self):
+        """Redraw the stint preview canvas to visually represent the planned stints and compounds 
+            based on the current StrategyPlan."""
+        
         c = self.stint_canvas
         c.delete("all")
         c.update_idletasks()
@@ -498,14 +564,10 @@ class StrategyGUI(tk.Tk):
                               fill="white", font=("Helvetica", 8, "bold"))
 
     # ── Simulation ────────────────────────────
-
-    def _run_threaded(self):
-        self.run_btn.config(state="disabled", text="Simulating…")
-        self.status_label.config(text="Running simulation…")
-        thread = threading.Thread(target=self._run_simulation, daemon=True)
-        thread.start()
-
     def _run_simulation(self):
+        """Run the race simulation with the current setup and strategy plan. This method gathers 
+            the selected track, player driver, grid position, and starting compound from the UI"""
+        
         try:
             track_name = self.track_var.get()
             player_code = self.driver_var.get()
@@ -546,6 +608,116 @@ class StrategyGUI(tk.Tk):
             err = traceback.format_exc()
             self.after(0, lambda: self._show_error(err))
 
+    def _run_threaded(self):
+        """Start the simulation in a separate thread to keep the UI responsive. This method 
+            disables the run button, updates the status label, and then starts the simulation in
+            a daemon thread."""
+
+        self.run_btn.config(state="disabled", text="Simulating…")
+        self.status_label.config(text="")
+        self._show_starting_grid()
+
+    def _show_starting_grid(self):
+        track_name = self.track_var.get()
+        player_code = self.driver_var.get()
+        grid_pos = int(self.grid_pos_var.get())
+
+        drivers = create_grid()
+        sorted_codes = [d.code for d in drivers]
+        if player_code in sorted_codes:
+            sorted_codes.remove(player_code)
+            sorted_codes.insert(grid_pos - 1, player_code)
+        sorted_drivers = sorted(
+            drivers,
+            key=lambda d: sorted_codes.index(d.code) if d.code in sorted_codes else 99
+        )
+
+        win = tk.Toplevel(self)
+        win.title("Starting Grid")
+        win.configure(bg="#1a1a2e")
+        win.geometry("480x580")
+        win.resizable(False, False)
+        win.grab_set()
+
+        tk.Label(win, text=f"Starting Grid — {track_name}",
+                font=("Helvetica", 14, "bold"), fg="white", bg="#1a1a2e"
+                ).pack(pady=(16, 4))
+        tk.Label(win, text=TRACKS[track_name].get("name", track_name),
+                font=("Helvetica", 9), fg="#666666", bg="#1a1a2e"
+                ).pack(pady=(0, 10))
+
+        outer = tk.Frame(win, bg="#1a1a2e")
+        outer.pack(fill="both", expand=True, padx=20)
+
+        canvas = tk.Canvas(outer, bg="#1a1a2e", highlightthickness=0)
+        vsb = ttk.Scrollbar(outer, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=vsb.set)
+        vsb.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+
+        frame = tk.Frame(canvas, bg="#1a1a2e")
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+
+        def _on_configure(e):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+        frame.bind("<Configure>", _on_configure)
+
+        for col_idx, col in enumerate(["POS", "DRIVER", "TEAM", "COMPOUND"]):
+            tk.Label(frame, text=col, fg="#555555", bg="#1a1a2e",
+                    font=("Helvetica", 8, "bold")).grid(
+                        row=0, column=col_idx, sticky="w", padx=(0, 20), pady=(0, 6))
+
+        for i, driver in enumerate(sorted_drivers):
+            r = i + 1
+            is_player = driver.code == player_code
+            fg = "#00d4ff" if is_player else ("#f1c40f" if i < 3 else "#cccccc")
+            bg_row = "#16213e" if i % 2 == 0 else "#1a1a2e"
+
+            pos_bg = (
+                "#e74c3c" if i == 0 else
+                "#aaaaaa" if i == 1 else
+                "#cd7f32" if i == 2 else
+                "#2c2c3e"
+            )
+            tk.Label(frame, text=f"P{i+1}", fg="white", bg=pos_bg,
+                    font=("Helvetica", 8, "bold"), width=3).grid(
+                        row=r, column=0, sticky="w", padx=(0, 20), pady=1)
+
+            tk.Label(frame, text=driver.code, fg=fg, bg=bg_row,
+                    font=("Helvetica", 9, "bold" if is_player else "normal")).grid(
+                        row=r, column=1, sticky="w", padx=(0, 20), pady=1)
+
+            tk.Label(frame, text=driver.team.name[:18], fg="#888888", bg=bg_row,
+                    font=("Helvetica", 9)).grid(
+                        row=r, column=2, sticky="w", padx=(0, 20), pady=1)
+
+            comp = driver.current_compound
+            comp_color = COMPOUND_COLORS.get(comp, "#888888")
+            marker = "  ◀ YOU" if is_player else ""
+            tk.Label(frame, text=f"● {comp}{marker}",
+                    fg="#00d4ff" if is_player else comp_color, bg=bg_row,
+                    font=("Helvetica", 9)).grid(
+                        row=r, column=3, sticky="w", pady=1)
+
+        btn_frame = tk.Frame(win, bg="#1a1a2e")
+        btn_frame.pack(fill="x", padx=20, pady=(10, 16))
+
+        def start():
+            win.destroy()
+            self.status_label.config(text="Running simulation…")
+            threading.Thread(target=self._run_simulation, daemon=True).start()
+
+        def cancel():
+            win.destroy()
+            self.run_btn.config(state="normal", text="▶  Simulate Race")
+
+        tk.Button(btn_frame, text="▶  Start Race", command=start,
+                bg="#e74c3c", fg="white", relief="flat", cursor="hand2",
+                font=("Helvetica", 11, "bold"), padx=16, pady=8).pack(side="left")
+        tk.Button(btn_frame, text="Cancel", command=cancel,
+                bg="#2c2c3e", fg="#aaaaaa", relief="flat", cursor="hand2",
+                font=("Helvetica", 10), padx=12, pady=8).pack(side="left", padx=(10, 0))
+            
     def _show_error(self, msg):
         self.run_btn.config(state="normal", text="▶  Simulate Race")
         self.status_label.config(text="Error — see console")
@@ -605,6 +777,10 @@ class StrategyGUI(tk.Tk):
         self.notebook.select(0)
 
     def _draw_strategy_chart(self, sorted_drivers, history, track, player_code):
+        """Draw the strategy chart on the strategy tab canvas, showing the stint compounds and 
+            pit stops for each driver across the laps. This method uses the history data to 
+            visualize the compounds used in each stint and marks the pit stop laps with circles."""
+        
         c = self.strategy_canvas
         c.delete("all")
         c.update_idletasks()
@@ -693,6 +869,11 @@ class StrategyGUI(tk.Tk):
             legend_x += 80
 
     def _update_info_tab(self, track, track_name, sorted_drivers, player_code):
+        """Update the info tab with detailed information about the track, weather, and the 
+            driver's performance. This method compiles a list of lines to display, including 
+            track characteristics and the player's result, and then updates the text widget with 
+            this information."""
+        
         player = next((d for d in sorted_drivers if d.code == player_code), None)
         pos = sorted_drivers.index(player) + 1 if player else "?"
 
@@ -739,13 +920,16 @@ class StrategyGUI(tk.Tk):
 # ─────────────────────────────────────────────
 
 def launch_strategy_gui():
+    """Launch the strategy planner GUI application."""
+
     app = StrategyGUI()
     app.mainloop()
 
 
 def main():
+    """Entry point for running the strategy planner GUI. This function simply calls the 
+        launch_strategy_gui function to start the application."""
     launch_strategy_gui()
-
 
 if __name__ == "__main__":
     main()
