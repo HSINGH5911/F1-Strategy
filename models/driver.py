@@ -17,6 +17,8 @@ class Driver:
         self.fastest_lap = None
         self.last_lap_time = None
         self.laps_since_last_pit = 0
+        self.penalties = 0
+        self.penalty_time = []
 
     def pitted(self):
         self.pit_stops += 1

@@ -45,12 +45,17 @@ def simulate_lap(drivers, track, race_state, total_laps):
         dnf_chance = (1 - driver.team.reliability) * .002
         if random.random() < dnf_chance:
             driver.dnf = True
-            drivers.remove(driver)
 
         if driver.dnf and random.random() < 0.6:
             race_state.safety_car = True
             race_state.sc_laps_remaining = random.randint(3, 6)
         
+        # Adding a random penalty
+        if random.random() < 0.001:
+            driver.penalties += 1
+            driver.penalty_time.append(5)
+            print(f"{driver.code} received a 5 second penalty for track limits violation!")
+            
         driver.laps_since_last_pit += 1
 
 
@@ -81,7 +86,27 @@ def process_overtakes(drivers, track):
         gap = attacker.race_time - defender.race_time
 
         if attempt_overtake(attacker, defender, gap, track):
-            swap_pos(attacker, defender)
+            penalty_chance = random.random()
+
+            if penalty_chance < 0.001:
+                attacker.dnf = True
+                defender.dnf = True
+                print(f"{attacker.code} and {defender.code} collided during an overtake!")
+
+            elif penalty_chance < 0.005:
+                attacker.penalties += 1
+                attacker.penalty_time.append(10)
+                print(f"{attacker.code} received a 10 second penalty for an aggressive overtake on {defender.code}!")
+            
+            elif penalty_chance < 0.02:
+                attacker.penalties += 1
+                attacker.penalty_time.append(5)
+                print(f"{attacker.code} received a 5 second penalty for an aggressive overtake on {defender.code}!")
+
+            
+
+            else:
+                swap_pos(attacker, defender)
 
 def get_num__rec_pit_stops(track):
     """Determine the recommended number of pit stops for a given track, handling cases where the 
@@ -116,6 +141,14 @@ def get_pit_window(track):
 
     return pit_window
 
+def serve_penalty(driver):
+    """Apply any pending penalties to the driver by adding the penalty time to their race time and 
+        clearing the penalty list."""
+    
+    if driver.penalties > 0:
+        driver.race_time += driver.penalty_time.pop(0)
+        driver.penalties -= 1
+
 def process_pit_stops(drivers, track, race_state, skip_codes=None):
     """Evaluate each driver's situation to determine if a pit stop should be performed based on 
         tire wear, race conditions, and strategic considerations such as undercut/overcut 
@@ -125,7 +158,17 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
     current_lap = race_state.current_lap
 
     pit_stop_amount = get_num__rec_pit_stops(track)
-    pit_window = get_pit_window(track)
+    
+    # Build pit window based on calculated pit_stop_amount
+    if pit_stop_amount == 1:
+        pit_window = [total_laps // 2]
+    elif pit_stop_amount == 2:
+        pit_window = [
+            total_laps // 3,
+            (2 * total_laps) // 3
+        ]
+    else:
+        pit_window = []
 
     near_window = any(
         abs(race_state.current_lap - lap) <= 3
@@ -152,11 +195,14 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
             1 for lap in pit_window
             if current_lap >= lap
         )
+        
+        # Check if driver has completed their required stops
+        has_completed_required_stops = driver.pit_stops >= pit_stop_amount
 
         # Pitting due to rain 
         wet = (
-            race_state.weather_state == "WET" 
-            and (driver.current_compound != "WET" or driver.current_compound != "INTERMEDIATE")
+            race_state.weather_state == "WET"
+            and driver.current_compound not in ("WET", "INTERMEDIATE")
         )
 
         if wet:
@@ -166,20 +212,25 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                 pick_compound(laps_remaining, track, race_state),
                 race_state
             )
+            serve_penalty(driver)
+            print(f"{driver.code} is pitting due to rain conditions! on lap {race_state.current_lap}")
             continue
 
         # Pitting due to tire reached max possible distance
-        if driver.tire_distance >= tire_data["max_distance"]:
+        if driver.tire_distance >= tire_data["max_distance"] and laps_remaining > 10:
             perform_stop(
                 driver,
                 track,
                 pick_compound(laps_remaining, track, race_state),
                 race_state
             )
+            serve_penalty(driver)
+            print(f"{driver.code} is pitting due to tire wear! on lap {race_state.current_lap}")
             continue
 
-        # Pit for 2 stop strat and the tires are starting to struggle in the second stint
-        if driver.pit_stops < target_stops_by_now:
+        # Pit for multi-stop strategy and tires are starting to struggle
+        # But only if we haven't already done the required stops AND we're near a pit window
+        if driver.pit_stops < target_stops_by_now and near_window:
             if driver.tire_distance > tire_data["max_distance"] * 0.6:
                 perform_stop(
                     driver,
@@ -187,15 +238,21 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                     pick_compound(laps_remaining, track, race_state),
                     race_state
                 )
+                serve_penalty(driver)
+                print(f"{driver.code} is pitting to stay on optimal strategy! on lap {race_state.current_lap}")
+                continue
 
-        # Undercut -> We are faster than ahead car. Pit now and jummp them
-        if car_ahead and laps_since_pit > 10 and near_window:
+        # Undercut -> We are faster than ahead car. Pit now and jump them
+        # But only if we haven't already completed our required stops
+        if not has_completed_required_stops and car_ahead and laps_since_pit > 10 and near_window:
             delta = pace_delta(driver, car_ahead)
             gap = driver.race_time - car_ahead.race_time
 
             if delta > 0.3 and gap < track["pit_delta"] * 0.6:
                 if random.random() < 0.65:
                     perform_stop(driver, track, "SOFT", race_state)
+                    serve_penalty(driver)
+                    print(f"{driver.code} is pitting for an undercut! on lap {race_state.current_lap}")
                     continue
 
         # Overcut -> Car behind is faster. Stay out and build gap
@@ -205,10 +262,11 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
 
             # They faster but not close enough to pass so skip pit this lap
             if delta > 0.4 and gap > 1.5:
+                print(f"{driver.code} is staying out for an overcut! on lap {race_state.current_lap}")
                 continue
 
-        # Car in front is pitting -> Mirror only if we aren't significantly faster
-        if car_ahead and car_ahead.pit_stops > driver.pit_stops and near_window and laps_since_pit > 10:
+        # Car in front is pitting -> Mirror only if we aren't significantly faster and we haven't completed stops
+        if not has_completed_required_stops and car_ahead and car_ahead.pit_stops > driver.pit_stops and near_window and laps_since_pit > 10:
             delta = pace_delta(driver, car_ahead)
             if delta < 0.5 and random.random() < 0.55:
                 perform_stop(
@@ -217,6 +275,8 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                     pick_compound(laps_remaining, track, race_state),
                     race_state
                 )
+                serve_penalty(driver)
+                print(f"{driver.code} is mirroring a pit stop! on lap {race_state.current_lap}")
                 continue
 
         # Free stop under safety car
@@ -228,34 +288,42 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                     pick_compound(laps_remaining, track, race_state),
                     race_state
                 )
+                serve_penalty(driver)
+                print(f"{driver.code} is taking a free stop under the safety car! on lap {race_state.current_lap}")
+                continue
 
-        # Forcing pit stop for those who havent stopped yet and we are past the window for 1 stop strategy
+        # Forcing pit stop for those who havent stopped yet and we are well past the final pit window
         laps_rem = total_laps - current_lap
         missing_stops = pit_stop_amount - driver.pit_stops
+        latest_pit_window = max(pit_window) if pit_window else total_laps
 
-        if missing_stops > 0 and laps_rem < missing_stops * 5:
+        # Only force pit if actually missing required stops AND far past window AND critical laps remaining
+        if missing_stops > 0 and current_lap > latest_pit_window + 5 and laps_rem < missing_stops * 5:
             perform_stop(
                 driver,
                 track,
                 pick_compound(laps_remaining, track, race_state),
                 race_state
             )
+            serve_penalty(driver)
+            print(f"{driver.code} is being forced to pit! on lap {race_state.current_lap}")
             continue
 
 def pick_compound(laps_left, track, race_state):
     """Method to pick the compound to use for the race after pitting"""
 
     stress = track["tire_stress"]
+    distance_left  = laps_left * track["length_km"]
 
     if race_state.track_wetness >= 0.6:
         return "WET"
     elif race_state.track_wetness < 0.6 and race_state.track_wetness >= 0.2:
         return "INTERMEDIATE"
 
-    if laps_left < 15:
+    if distance_left <= TIRES["SOFT"]["max_distance"]:
         return "SOFT"
-    elif laps_left < 30:
-        return random.choice(["MEDIUM", "SOFT"])
+    elif distance_left <= TIRES["MEDIUM"]["max_distance"]:
+        return random.choice(["SOFT", "MEDIUM"])
     else:
         return "HARD" if stress > 0.75 else random.choice(["MEDIUM", "HARD"])
 
@@ -314,3 +382,7 @@ def simulate_race(drivers, track, race_state, history=None):
 
         race_state.current_lap += 1
         race_state.laps_remaining = max(0, total_laps - race_state.current_lap + 1)
+    
+    # Add any time penalties to final times at the end of the race
+    for driver in drivers:
+        serve_penalty(driver)
