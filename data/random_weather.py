@@ -1,7 +1,7 @@
 import random
 
 def update_weather(current_wetness):
-    rain_change = random.uniform(-0.05, 0.08)
+    rain_change = random.uniform(-0.05, 0.05)
 
     current_wetness += rain_change
 
@@ -41,11 +41,14 @@ def dry_track(wetness):
     return max(wetness, 0)
 
 
-def weather_state(wetness):
+def weather_state(wetness, race_state):
     if wetness < 0.2:
+        race_state.weather_state = "DRY"
         return "DRY"
+
+    race_state.weather_state = "WET"
 
     if wetness < 0.6:
         return "INTERMEDIATE"
-
+        
     return "WET"

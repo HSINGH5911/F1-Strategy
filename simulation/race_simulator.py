@@ -13,6 +13,9 @@ from data.random_weather import update_weather as update_track_wetness, weather_
 
 
 def race_laps(track):
+    """Calculate the number of laps for a given track, using either a specified lap count or by 
+        dividing the standard race distance by the track length."""
+    
     from config.General import DEFAULT_RACE_DISTANCE_KM, MONACO_RACE_DISTANCE_KM
     race_distance = (
         MONACO_RACE_DISTANCE_KM
@@ -22,6 +25,9 @@ def race_laps(track):
     return track.get("laps", math.ceil(race_distance / track["length_km"]))
 
 def simulate_lap(drivers, track, race_state, total_laps):
+    """Simulate a single lap for all drivers, updating their lap times, tire wear, fuel levels, 
+        and handling potential DNFs and safety car conditions."""
+    
     for driver in drivers:
         lap_time = calc_lap_time(driver, track, race_state)
 
@@ -49,6 +55,9 @@ def simulate_lap(drivers, track, race_state, total_laps):
 
 
 def update_positions(drivers):
+    """Sort drivers by their current race time to update their positions and calculate their gap 
+        to the leader."""
+    
     drivers.sort(key=lambda d: d.race_time)
 
     for pos, driver in enumerate(drivers, start=1):
@@ -61,6 +70,9 @@ def update_positions(drivers):
 
 
 def process_overtakes(drivers, track):
+    """Iterate through the drivers and attempt overtakes based on their current gap and pace 
+        difference, starting from the second driver to compare with the one ahead."""
+    
     for i in range(1, len(drivers)):
 
         attacker = drivers[i]
@@ -72,6 +84,9 @@ def process_overtakes(drivers, track):
             swap_pos(attacker, defender)
 
 def get_num__rec_pit_stops(track):
+    """Determine the recommended number of pit stops for a given track, handling cases where the 
+        recommendation is 1.5 by randomly choosing between 1 or 2 stops."""
+    
     pit_stop_amount = track["reccommended_pit_stops"]
 
     if pit_stop_amount == 1.5:
@@ -81,6 +96,10 @@ def get_num__rec_pit_stops(track):
     return pit_stop_amount
 
 def get_pit_window(track):
+    """Calculate the optimal pit window(s) for a given track based on the total number of laps 
+        and the recommended number of pit stops, returning a list of lap numbers where pit stops 
+        should ideally occur."""
+    
     total_laps = race_laps(track)
 
     pit_stop_amount = get_num__rec_pit_stops(track)
@@ -98,6 +117,10 @@ def get_pit_window(track):
     return pit_window
 
 def process_pit_stops(drivers, track, race_state, skip_codes=None):
+    """Evaluate each driver's situation to determine if a pit stop should be performed based on 
+        tire wear, race conditions, and strategic considerations such as undercut/overcut 
+        opportunities, safety car presence, and proximity to optimal pit windows."""
+    
     total_laps = race_laps(track)
     current_lap = race_state.current_lap
 
@@ -129,6 +152,21 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
             1 for lap in pit_window
             if current_lap >= lap
         )
+
+        # Pitting due to rain 
+        wet = (
+            race_state.weather_state == "WET" 
+            and (driver.current_compound != "WET" or driver.current_compound != "INTERMEDIATE")
+        )
+
+        if wet:
+            perform_stop(
+                driver,
+                track,
+                pick_compound(laps_remaining, track, race_state),
+                race_state
+            )
+            continue
 
         # Pitting due to tire reached max possible distance
         if driver.tire_distance >= tire_data["max_distance"]:
@@ -206,6 +244,7 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
 
 def pick_compound(laps_left, track, race_state):
     """Method to pick the compound to use for the race after pitting"""
+
     stress = track["tire_stress"]
 
     if race_state.track_wetness >= 0.6:
@@ -220,14 +259,19 @@ def pick_compound(laps_left, track, race_state):
     else:
         return "HARD" if stress > 0.75 else random.choice(["MEDIUM", "HARD"])
 
-
-
 def update_weather(race_state):
+    """Update the track wetness and weather state for the current lap, simulating changing 
+        weather conditions"""
+    
     race_state.track_wetness = update_track_wetness(race_state.track_wetness)
-    race_state.weather_state = weather_state(race_state.track_wetness)
+    race_state.weather_state = weather_state(race_state.track_wetness, race_state)
 
 
 def record_history(history, race_state, drivers):
+    """Record the current state of the race for each driver, including lap times, positions, 
+        tire compounds, and pit stops, to allow for later analysis and visualization. This 
+        function updates the history dictionary with the relevant data for each driver at"""
+    
     if history is None:
         return
 
@@ -249,18 +293,9 @@ def record_history(history, race_state, drivers):
         history.setdefault("compounds", {}).setdefault(driver.code, []).append(driver.current_compound)
         history.setdefault("gaps", {}).setdefault(driver.code, []).append(driver.gap_to_lead)
 
-
-def race_laps(track):
-    race_distance = (
-        MONACO_RACE_DISTANCE_KM
-        if track.get("name") == "Monaco"
-        else DEFAULT_RACE_DISTANCE_KM
-    )
-
-    return track.get("laps", math.ceil(race_distance / track["length_km"]))
-
-
 def simulate_race(drivers, track, race_state, history=None):
+    """Simulate an entire race, iterating through each lap and updating driver states, positions"""
+
     total_laps = race_laps(track)
     race_state.laps_remaining = total_laps - race_state.current_lap + 1
 
@@ -279,4 +314,3 @@ def simulate_race(drivers, track, race_state, history=None):
 
         race_state.current_lap += 1
         race_state.laps_remaining = max(0, total_laps - race_state.current_lap + 1)
-
