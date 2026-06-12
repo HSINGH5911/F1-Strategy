@@ -231,7 +231,7 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
         # Pit for multi-stop strategy and tires are starting to struggle
         # But only if we haven't already done the required stops AND we're near a pit window
         if driver.pit_stops < target_stops_by_now and near_window:
-            if driver.tire_distance > tire_data["max_distance"] * 0.6:
+            if driver.tire_distance > tire_data["max_distance"]:
                 perform_stop(
                     driver,
                     track,
@@ -280,7 +280,7 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                 continue
 
         # Free stop under safety car
-        if race_state.safety_car and driver.tire_distance > 20:
+        if race_state.safety_car and driver.tire_distance > tire_data["max_distance"] * 0.8:
             if random.random() < 0.75:
                 perform_stop(
                     driver,
