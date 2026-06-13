@@ -1,6 +1,8 @@
 from simulation.lap_time_model import calc_lap_time
 
 def estimate_future_pace(driver, track, race_state, laps):
+    """Estimates the future pace of the car"""
+
     total = 0
 
     for _ in range(laps):
@@ -9,17 +11,20 @@ def estimate_future_pace(driver, track, race_state, laps):
     return total
 
 def overcut_gain(driver, rival, track, race_state, extra_laps):
+    """Time stood to gain by overcutting"""
     driver_time = estimate_future_pace(driver, track, race_state, extra_laps)
     rival_time = estimate_future_pace(rival, track, race_state, extra_laps)
 
     return rival_time - driver_time
 
 def can_overcut(driver, rival, track, race_state):
+    """Should driver overcut"""
     gain = overcut_gain(driver, rival, track, race_state, 3)
 
     return gain > 1
 
 def best_overcut_lap(driver, rival, track, race_state):
+    """Finds best lap to overcut"""
     best_gain = float('-inf')
     best_lap = 0
 
