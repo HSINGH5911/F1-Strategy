@@ -63,7 +63,6 @@ def simulate_lap(drivers, track, race_state, total_laps):
             
         driver.laps_since_last_pit += 1
 
-
 def update_positions(drivers):
     """Sort drivers by their current race time to update their positions and calculate their gap 
         to the leader."""
@@ -77,7 +76,6 @@ def update_positions(drivers):
 
     for driver in drivers:
         driver.gap_to_lead = driver.race_time - leader_time
-
 
 def process_overtakes(drivers, track):
     """Iterate through the drivers and attempt overtakes based on their current gap and pace 
@@ -160,6 +158,20 @@ def serve_penalty(driver):
         driver.race_time += driver.penalty_time.pop(0)
         driver.penalties -= 1
 
+def get_field_strategy_state(drivers, track):
+    """Summarize what the field is doing strategically."""
+    total_laps = race_laps(track)
+    
+    state = {}
+    for driver in drivers:
+        tire_data = TIRES[driver.current_compound]
+        state[driver.code] = {
+            "tire_life_pct": driver.tire_distance / tire_data["max_distance"],
+            "laps_since_pit": driver.laps_since_last_pit,
+            "pit_stops": driver.pit_stops,
+        }
+    return state
+
 def process_pit_stops(drivers, track, race_state, skip_codes=None):
     """Evaluate each driver's situation to determine if a pit stop should be performed based on 
         tire wear, race conditions, and strategic considerations such as undercut/overcut 
@@ -167,15 +179,38 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
     
     total_laps = race_laps(track)
     current_lap = race_state.current_lap
-
-    
+    field_state = get_field_strategy_state(drivers, track)
 
     if skip_codes is None:
         skip_codes = set()
 
     for i, driver in enumerate(drivers):
         laps_remaining = race_state.laps_remaining
-        
+        laps_since_pit = driver.laps_since_last_pit
+        tire_data = TIRES[driver.current_compound]
+        pit_stop_amount = get_num_rec_pit_stops(track, driver)
+        has_completed_required_stops = driver.pit_stops >= pit_stop_amount
+        car_ahead = drivers[i - 1] if i > 0 else None
+        car_behind = drivers[i + 1] if i < len(drivers) - 1 else None
+
+        # How many drivers have already pitted in this stint
+        drivers_ahead_pitted = sum(
+            1 for d in drivers[:i]
+            if field_state[d.code]["laps_since_pit"] < 5
+        )
+
+        # If more than 3 drivers have pitted, pit noe
+        if drivers_ahead_pitted >= 3 and not has_completed_required_stops and laps_since_pit > 8:
+            perform_stop(
+                driver, 
+                track,
+                pick_compound(laps_remaining, track, race_state),
+                race_state
+            ) 
+            serve_penalty(driver)
+            print(f"{driver.code} forced to react to field pitting! lap {race_state.current_lap}")
+            continue
+
         # Pitting due to rain - applies to ALL drivers including player (mandatory safety)
         wet = (
             race_state.weather_state == "WET"
@@ -215,13 +250,6 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
             abs(race_state.current_lap - lap) <= 3
             for lap in pit_window
         )
-
-        laps_since_pit = driver.laps_since_last_pit
-
-        tire_data = TIRES[driver.current_compound]
-
-        car_ahead = drivers[i - 1] if i > 0 else None
-        car_behind = drivers[i + 1] if i < len(drivers) - 1 else None
 
         target_stops_by_now = sum(
             1 for lap in pit_window
