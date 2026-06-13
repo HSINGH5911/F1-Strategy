@@ -108,26 +108,32 @@ def process_overtakes(drivers, track):
             else:
                 swap_pos(attacker, defender)
 
-def get_num__rec_pit_stops(track):
+def get_num_rec_pit_stops(track, driver):
     """Determine the recommended number of pit stops for a given track, handling cases where the 
         recommendation is 1.5 by randomly choosing between 1 or 2 stops."""
     
     pit_stop_amount = track["reccommended_pit_stops"]
 
+    # Drivers that qualify higher are more likely to use one stop than those further down 
+    # the grid who are more likely to use 2 stops when the recommendation is 1.5
     if pit_stop_amount == 1.5:
-        # Randomly decide if we want 1 or 2 stops for this
-        pit_stop_amount = 1 if random.random() < 0.5 else 2
+        if driver.position <= 5:
+            pit_stop_amount = 1
+        elif 5 < driver.position <= 10:
+            pit_stop_amount = random.choice([1, 2])
+        else:
+            pit_stop_amount = 2
 
     return pit_stop_amount
 
-def get_pit_window(track):
+def get_pit_window(track, driver):
     """Calculate the optimal pit window(s) for a given track based on the total number of laps 
         and the recommended number of pit stops, returning a list of lap numbers where pit stops 
         should ideally occur."""
     
     total_laps = race_laps(track)
 
-    pit_stop_amount = get_num__rec_pit_stops(track)
+    pit_stop_amount = get_num_rec_pit_stops(track, driver)
 
     if pit_stop_amount == 1:
         pit_window = [total_laps // 2]
@@ -157,23 +163,7 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
     total_laps = race_laps(track)
     current_lap = race_state.current_lap
 
-    pit_stop_amount = get_num__rec_pit_stops(track)
     
-    # Build pit window based on calculated pit_stop_amount
-    if pit_stop_amount == 1:
-        pit_window = [total_laps // 2]
-    elif pit_stop_amount == 2:
-        pit_window = [
-            total_laps // 3,
-            (2 * total_laps) // 3
-        ]
-    else:
-        pit_window = []
-
-    near_window = any(
-        abs(race_state.current_lap - lap) <= 3
-        for lap in pit_window
-    )
 
     if skip_codes is None:
         skip_codes = set()
@@ -182,6 +172,24 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
         # skip drivers explicitly requested (e.g., player when using external strategy)
         if driver.code in skip_codes:
             continue
+        
+        pit_stop_amount = get_num_rec_pit_stops(track, driver)
+    
+        # Build pit window based on calculated pit_stop_amount
+        if pit_stop_amount == 1:
+            pit_window = [total_laps // 2]
+        elif pit_stop_amount == 2:
+            pit_window = [
+                total_laps // 3,
+                (2 * total_laps) // 3
+            ]
+        else:
+            pit_window = []
+
+        near_window = any(
+            abs(race_state.current_lap - lap) <= 3
+            for lap in pit_window
+        )
 
         laps_since_pit = driver.laps_since_last_pit
 

@@ -20,7 +20,7 @@ from config.Tracks import TRACKS
 from config.Teams import TEAMS
 from config.Drivers import DRIVERS
 from config.Tires import TIRES
-from simulation.race_simulator import simulate_race, process_pit_stops, get_num__rec_pit_stops, get_pit_window
+from simulation.race_simulator import simulate_race, process_pit_stops, get_num_rec_pit_stops, get_pit_window
 
 from ui.dashboard import (
     print_standings,
@@ -460,8 +460,11 @@ class StrategyGUI(tk.Tk):
         
         track = TRACKS[self.track_var.get()]
         total = race_laps(track)
-        pit_stop_amount = get_num__rec_pit_stops(track)
-        pit_window = get_pit_window(track)
+        drivers = create_grid()
+        driver = next((d for d in drivers if d.code == self.driver_var.get()), None)
+
+        pit_stop_amount = get_num_rec_pit_stops(track, driver)
+        pit_window = get_pit_window(track, driver)
 
         for i in range(pit_stop_amount):
             self._add_stop_row(pit_window[i], "HARD")
