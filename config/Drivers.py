@@ -36,17 +36,17 @@ DRIVERS = {
         "aggression": 0.95
     },
 
-    "TSU": {
-        "name": "Yuki Tsunoda",
-        "team": "Red Bull",
-        "skill": 0.91,
-        "qualifying": 0.92,
-        "racecraft": 0.90,
-        "tire_management": 0.89,
-        "wet_skill": 0.88,
-        "consistency": 0.87,
-        "aggression": 0.93
-    },
+    "LIN": {
+    "name": "Arvid Lindblad",
+    "team": "RB",
+    "skill": 0.78,
+    "qualifying": 0.80,
+    "racecraft": 0.76,
+    "tire_management": 0.72,
+    "wet_skill": 0.75,
+    "consistency": 0.70,
+    "aggression": 0.83
+},
 
     "LEC": {
         "name": "Charles Leclerc",
@@ -146,7 +146,7 @@ DRIVERS = {
 
     "HAD": {
         "name": "Isack Hadjar",
-        "team": "RB",
+        "team": "Red Bull",
         "skill": 0.88,
         "qualifying": 0.89,
         "racecraft": 0.87,
@@ -194,7 +194,7 @@ DRIVERS = {
 
     "HUL": {
         "name": "Nico Hulkenberg",
-        "team": "Kick Sauber",
+        "team": "Audi",
         "skill": 0.90,
         "qualifying": 0.88,
         "racecraft": 0.91,
@@ -206,7 +206,7 @@ DRIVERS = {
 
     "BOR": {
         "name": "Gabriel Bortoleto",
-        "team": "Kick Sauber",
+        "team": "Audi",
         "skill": 0.85,
         "qualifying": 0.86,
         "racecraft": 0.84,

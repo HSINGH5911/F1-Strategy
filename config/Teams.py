@@ -87,7 +87,7 @@ TEAMS = {
         "strategy_rating": 0.74
     },
 
-    "Kick Sauber": {
+    "Audi": {
         "base_pace": 0.52,
         "qualifying_pace": 0.48,
         "race_pace": 0.56,

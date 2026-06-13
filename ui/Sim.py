@@ -312,7 +312,7 @@ class StrategyGUI(tk.Tk):
                      values=list(TIRES.keys()), state="readonly", width=22).grid(
             row=2, column=1, padx=(8, 0), pady=2)
 
-        # Grid position
+        # Grid position (used as fallback default only; grid window overrides)
         tk.Label(f, text="Grid position", fg="#aaaaaa", bg="#16213e", font=("Helvetica", 9)).grid(
             row=3, column=0, sticky="w", pady=2)
         self.grid_pos_var = tk.IntVar(value=1)
@@ -567,28 +567,37 @@ class StrategyGUI(tk.Tk):
                               fill="white", font=("Helvetica", 8, "bold"))
 
     # ── Simulation ────────────────────────────
-    def _run_simulation(self):
-        """Run the race simulation with the current setup and strategy plan. This method gathers 
-            the selected track, player driver, grid position, and starting compound from the UI"""
+
+    def _run_simulation(self, grid_order: list = None):
+        """Run the race simulation with the current setup and strategy plan.
+           grid_order: optional list of driver codes in starting order (index 0 = P1).
+           If None, falls back to the auto-generated qualifying order."""
         
         try:
             track_name = self.track_var.get()
             player_code = self.driver_var.get()
-            grid_pos = int(self.grid_pos_var.get())
 
             track = TRACKS[track_name]
             race_state = RaceState()
             drivers = create_grid()
 
-            # Set grid positions: player first, then AI in order
-            sorted_codes = [d.code for d in drivers]
-            if player_code in sorted_codes:
-                sorted_codes.remove(player_code)
-                sorted_codes.insert(grid_pos - 1, player_code)
-            for i, driver in enumerate(
-                sorted(drivers, key=lambda d: sorted_codes.index(d.code)
-                       if d.code in sorted_codes else 99), start=1
-            ):
+            if grid_order is not None:
+                # Manual grid: sort drivers by the explicit order supplied from the grid window
+                code_to_pos = {code: idx for idx, code in enumerate(grid_order)}
+                drivers.sort(key=lambda d: code_to_pos.get(d.code, 99))
+            else:
+                # Automatic fallback: honour the grid_pos_var spinbox for the player only
+                grid_pos = int(self.grid_pos_var.get())
+                sorted_codes = [d.code for d in drivers]
+                if player_code in sorted_codes:
+                    sorted_codes.remove(player_code)
+                    sorted_codes.insert(grid_pos - 1, player_code)
+                drivers.sort(
+                    key=lambda d: sorted_codes.index(d.code)
+                    if d.code in sorted_codes else 99
+                )
+
+            for i, driver in enumerate(drivers, start=1):
                 driver.position = i
 
             # Apply starting compound to player
@@ -612,19 +621,22 @@ class StrategyGUI(tk.Tk):
             self.after(0, lambda: self._show_error(err))
 
     def _run_threaded(self):
-        """Start the simulation in a separate thread to keep the UI responsive. This method 
-            disables the run button, updates the status label, and then starts the simulation in
-            a daemon thread."""
+        """Start the simulation in a separate thread to keep the UI responsive."""
 
         self.run_btn.config(state="disabled", text="Simulating…")
         self.status_label.config(text="")
         self._show_starting_grid()
 
     def _show_starting_grid(self):
+        """Show the starting grid window.  Drivers can be reordered by editing the position
+           spinboxes and clicking 'Apply Order'.  Clicking 'Start Race' locks in the grid and
+           begins the simulation."""
+
         track_name = self.track_var.get()
         player_code = self.driver_var.get()
         grid_pos = int(self.grid_pos_var.get())
 
+        # Build the auto grid, then honour the player's chosen grid position
         drivers = create_grid()
         sorted_codes = [d.code for d in drivers]
         if player_code in sorted_codes:
@@ -635,20 +647,25 @@ class StrategyGUI(tk.Tk):
             key=lambda d: sorted_codes.index(d.code) if d.code in sorted_codes else 99
         )
 
+        # ── Toplevel window ──────────────────────────────────────
         win = tk.Toplevel(self)
         win.title("Starting Grid")
         win.configure(bg="#1a1a2e")
-        win.geometry("480x580")
+        win.geometry("560x620")
         win.resizable(False, False)
         win.grab_set()
 
         tk.Label(win, text=f"Starting Grid — {track_name}",
-                font=("Helvetica", 14, "bold"), fg="white", bg="#1a1a2e"
-                ).pack(pady=(16, 4))
+                 font=("Helvetica", 14, "bold"), fg="white", bg="#1a1a2e"
+                 ).pack(pady=(16, 2))
         tk.Label(win, text=TRACKS[track_name].get("name", track_name),
-                font=("Helvetica", 9), fg="#666666", bg="#1a1a2e"
-                ).pack(pady=(0, 10))
+                 font=("Helvetica", 9), fg="#666666", bg="#1a1a2e"
+                 ).pack(pady=(0, 4))
+        tk.Label(win, text="Edit position numbers then click  'Apply Order'  to reorder the grid.",
+                 font=("Helvetica", 8), fg="#555577", bg="#1a1a2e"
+                 ).pack(pady=(0, 8))
 
+        # ── Scrollable grid rows ─────────────────────────────────
         outer = tk.Frame(win, bg="#1a1a2e")
         outer.pack(fill="both", expand=True, padx=20)
 
@@ -659,68 +676,120 @@ class StrategyGUI(tk.Tk):
         canvas.pack(side="left", fill="both", expand=True)
 
         frame = tk.Frame(canvas, bg="#1a1a2e")
-        canvas.create_window((0, 0), window=frame, anchor="nw")
+        frame_id = canvas.create_window((0, 0), window=frame, anchor="nw")
 
         def _on_configure(e):
             canvas.configure(scrollregion=canvas.bbox("all"))
         frame.bind("<Configure>", _on_configure)
 
+        # Column headers
         for col_idx, col in enumerate(["POS", "DRIVER", "TEAM", "COMPOUND"]):
             tk.Label(frame, text=col, fg="#555555", bg="#1a1a2e",
-                    font=("Helvetica", 8, "bold")).grid(
-                        row=0, column=col_idx, sticky="w", padx=(0, 20), pady=(0, 6))
+                     font=("Helvetica", 8, "bold")).grid(
+                         row=0, column=col_idx, sticky="w", padx=(0, 20), pady=(0, 6))
 
-        for i, driver in enumerate(sorted_drivers):
-            r = i + 1
-            is_player = driver.code == player_code
-            fg = "#00d4ff" if is_player else ("#f1c40f" if i < 3 else "#cccccc")
-            bg_row = "#16213e" if i % 2 == 0 else "#1a1a2e"
+        # One IntVar per driver to hold their editable position
+        pos_vars: list[tuple[tk.IntVar, str]] = []  # (IntVar, driver_code)
+        row_labels: dict[str, tk.Label] = {}         # code -> position badge label
 
-            pos_bg = (
-                "#e74c3c" if i == 0 else
-                "#aaaaaa" if i == 1 else
-                "#cd7f32" if i == 2 else
-                "#2c2c3e"
-            )
-            tk.Label(frame, text=f"P{i+1}", fg="white", bg=pos_bg,
-                    font=("Helvetica", 8, "bold"), width=3).grid(
-                        row=r, column=0, sticky="w", padx=(0, 20), pady=1)
+        def _build_rows(driver_list):
+            """Render all grid rows; called initially and after every apply."""
+            for widget in frame.winfo_children():
+                # Clear all rows except the header (row 0 is rebuilt too)
+                widget.destroy()
 
-            tk.Label(frame, text=driver.code, fg=fg, bg=bg_row,
-                    font=("Helvetica", 9, "bold" if is_player else "normal")).grid(
-                        row=r, column=1, sticky="w", padx=(0, 20), pady=1)
+            # Re-draw headers
+            for col_idx, col in enumerate(["POS", "DRIVER", "TEAM", "COMPOUND"]):
+                tk.Label(frame, text=col, fg="#555555", bg="#1a1a2e",
+                         font=("Helvetica", 8, "bold")).grid(
+                             row=0, column=col_idx, sticky="w", padx=(0, 20), pady=(0, 6))
 
-            tk.Label(frame, text=driver.team.name[:18], fg="#888888", bg=bg_row,
-                    font=("Helvetica", 9)).grid(
-                        row=r, column=2, sticky="w", padx=(0, 20), pady=1)
+            pos_vars.clear()
 
-            comp = driver.current_compound
-            comp_color = COMPOUND_COLORS.get(comp, "#888888")
-            marker = "  ◀ YOU" if is_player else ""
-            tk.Label(frame, text=f"● {comp}{marker}",
-                    fg="#00d4ff" if is_player else comp_color, bg=bg_row,
-                    font=("Helvetica", 9)).grid(
-                        row=r, column=3, sticky="w", pady=1)
+            for i, driver in enumerate(driver_list):
+                r = i + 1
+                is_player = driver.code == player_code
+                fg = "#00d4ff" if is_player else ("#f1c40f" if i < 3 else "#cccccc")
+                bg_row = "#16213e" if i % 2 == 0 else "#1a1a2e"
 
+                # Editable position spinbox
+                pos_var = tk.IntVar(value=i + 1)
+                pos_vars.append((pos_var, driver.code))
+
+                pos_spin = ttk.Spinbox(frame, from_=1, to=len(driver_list),
+                                       textvariable=pos_var, width=4)
+                pos_spin.grid(row=r, column=0, sticky="w", padx=(0, 20), pady=1)
+
+                tk.Label(frame, text=driver.code, fg=fg, bg=bg_row,
+                         font=("Helvetica", 9, "bold" if is_player else "normal")).grid(
+                             row=r, column=1, sticky="w", padx=(0, 20), pady=1)
+
+                tk.Label(frame, text=driver.team.name[:18], fg="#888888", bg=bg_row,
+                         font=("Helvetica", 9)).grid(
+                             row=r, column=2, sticky="w", padx=(0, 20), pady=1)
+
+                comp = driver.current_compound
+                comp_color = COMPOUND_COLORS.get(comp, "#888888")
+                marker = "  ◀ YOU" if is_player else ""
+                tk.Label(frame, text=f"● {comp}{marker}",
+                         fg="#00d4ff" if is_player else comp_color, bg=bg_row,
+                         font=("Helvetica", 9)).grid(
+                             row=r, column=3, sticky="w", pady=1)
+
+        _build_rows(sorted_drivers)
+
+        # ── Apply Order button ───────────────────────────────────
+        def apply_order():
+            """Re-sort sorted_drivers according to the position spinboxes, resolve ties by
+               current order, then redraw the rows."""
+            # Read positions; if duplicate or out of range, fall back to current index
+            order = []
+            for idx, (pv, code) in enumerate(pos_vars):
+                try:
+                    p = int(pv.get())
+                except (ValueError, tk.TclError):
+                    p = idx + 1
+                order.append((p, idx, code))
+
+            order.sort(key=lambda x: (x[0], x[1]))  # stable sort: pos first, then original idx
+
+            # Re-map sorted_drivers to match the new order
+            code_to_driver = {d.code: d for d in sorted_drivers}
+            new_order = [code_to_driver[code] for _, _, code in order]
+            sorted_drivers[:] = new_order
+            _build_rows(sorted_drivers)
+
+        apply_btn = tk.Button(win, text="↕  Apply Order", command=apply_order,
+                              bg="#0f3460", fg="white", relief="flat", cursor="hand2",
+                              font=("Helvetica", 10, "bold"), padx=12, pady=6)
+        apply_btn.pack(fill="x", padx=20, pady=(6, 2))
+
+        # ── Start / Cancel buttons ───────────────────────────────
         btn_frame = tk.Frame(win, bg="#1a1a2e")
-        btn_frame.pack(fill="x", padx=20, pady=(10, 16))
+        btn_frame.pack(fill="x", padx=20, pady=(4, 16))
 
         def start():
+            # Capture the final ordered list of codes to pass to the simulation
+            final_order = [d.code for d in sorted_drivers]
             win.destroy()
             self.status_label.config(text="Running simulation…")
-            threading.Thread(target=self._run_simulation, daemon=True).start()
+            threading.Thread(
+                target=self._run_simulation,
+                kwargs={"grid_order": final_order},
+                daemon=True,
+            ).start()
 
         def cancel():
             win.destroy()
             self.run_btn.config(state="normal", text="▶  Simulate Race")
 
         tk.Button(btn_frame, text="▶  Start Race", command=start,
-                bg="#e74c3c", fg="white", relief="flat", cursor="hand2",
-                font=("Helvetica", 11, "bold"), padx=16, pady=8).pack(side="left")
+                  bg="#e74c3c", fg="white", relief="flat", cursor="hand2",
+                  font=("Helvetica", 11, "bold"), padx=16, pady=8).pack(side="left")
         tk.Button(btn_frame, text="Cancel", command=cancel,
-                bg="#2c2c3e", fg="#aaaaaa", relief="flat", cursor="hand2",
-                font=("Helvetica", 10), padx=12, pady=8).pack(side="left", padx=(10, 0))
-            
+                  bg="#2c2c3e", fg="#aaaaaa", relief="flat", cursor="hand2",
+                  font=("Helvetica", 10), padx=12, pady=8).pack(side="left", padx=(10, 0))
+
     def _show_error(self, msg):
         self.run_btn.config(state="normal", text="▶  Simulate Race")
         self.status_label.config(text="Error — see console")
@@ -781,8 +850,7 @@ class StrategyGUI(tk.Tk):
 
     def _draw_strategy_chart(self, sorted_drivers, history, track, player_code):
         """Draw the strategy chart on the strategy tab canvas, showing the stint compounds and 
-            pit stops for each driver across the laps. This method uses the history data to 
-            visualize the compounds used in each stint and marks the pit stop laps with circles."""
+            pit stops for each driver across the laps."""
         
         c = self.strategy_canvas
         c.delete("all")
@@ -814,7 +882,6 @@ class StrategyGUI(tk.Tk):
             code = driver.code
             is_player = code == player_code
 
-            # Driver label
             label_color = "#00d4ff" if is_player else "#888888"
             c.create_text(pad_left - 6, y + row_h // 2 - 4, text=code,
                           anchor="e", fill=label_color,
@@ -824,7 +891,6 @@ class StrategyGUI(tk.Tk):
             if not compounds_by_lap:
                 continue
 
-            # Draw stint segments
             stint_start = 0
             prev_c = compounds_by_lap[0]
             for i, comp in enumerate(compounds_by_lap):
@@ -842,12 +908,10 @@ class StrategyGUI(tk.Tk):
                     stint_start = i
                     prev_c = comp
 
-            # Draw pit markers (visible even if compound doesn't change)
             pit_laps = history.get("pit_laps", {}).get(code, [])
             for pit_lap in pit_laps:
                 try:
                     lap_num = int(pit_lap)
-
                 except Exception:
                     continue
                 if lap_num < 1 or lap_num > total_laps:
@@ -855,11 +919,8 @@ class StrategyGUI(tk.Tk):
                 x = pad_left + lap_num / total_laps * chart_w
                 yc = y + (row_h - 6) / 2
                 r = 5
-                fill = "#ffffff"
-                outline = "#000000"
-                c.create_oval(x - r, yc - r, x + r, yc + r, fill=fill, outline=outline)
+                c.create_oval(x - r, yc - r, x + r, yc + r, fill="#ffffff", outline="#000000")
 
-        # Legend
         legend_x = pad_left
         c.create_text(legend_x, total_height - 24, text="Compounds: ",
                       anchor="w", fill="#666666", font=("Helvetica", 8))
@@ -873,9 +934,7 @@ class StrategyGUI(tk.Tk):
 
     def _update_info_tab(self, track, track_name, sorted_drivers, player_code):
         """Update the info tab with detailed information about the track, weather, and the 
-            driver's performance. This method compiles a list of lines to display, including 
-            track characteristics and the player's result, and then updates the text widget with 
-            this information."""
+            driver's performance."""
         
         player = next((d for d in sorted_drivers if d.code == player_code), None)
         pos = sorted_drivers.index(player) + 1 if player else "?"
@@ -930,8 +989,6 @@ def launch_strategy_gui():
 
 
 def main():
-    """Entry point for running the strategy planner GUI. This function simply calls the 
-        launch_strategy_gui function to start the application."""
     launch_strategy_gui()
 
 if __name__ == "__main__":
