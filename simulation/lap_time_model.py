@@ -14,11 +14,19 @@ def calc_lap_time(driver, track, race_state):
 
     lap_time = track["base_lap_time"]
     lap_time += driver.team.base_pace
+    lap_time += tire_data["base_pace"]
+    lap_time -= (driver.skill - 0.9) * 2.0
+
+    variance = 0.3 * (1.0 - driver.consistency)
+    lap_time += random.uniform(-variance, variance)
+
+    if driver.position > 10:
+        lap_time += (1.0 - driver.racecraft) * 1.5
+
     lap_time += tire_performance_curve(driver)
     lap_time += weather_pace_penalty(race_state.track_wetness)
     lap_time *= weather_deg_modifier(race_state.track_wetness)
     lap_time += driver.fuel_percentage * .03
-    lap_time += random.uniform(-.15, .15)
 
     if random.random() < driver.aggression * .03:
         lap_time += random.uniform(0.5, 4.0)
@@ -30,10 +38,8 @@ def calc_lap_time(driver, track, race_state):
     if driver.tire_distance > cliff_lap:
         lap_time += (driver.tire_distance - cliff_lap) * .25
 
-    # Warmup penalty
     if driver.tire_distance < 3:
-        warmup_penalty = (3 - driver.tire_distance) * 0.4
-        lap_time += warmup_penalty
+        lap_time += (3 - driver.tire_distance) * 0.4
 
     return lap_time
 

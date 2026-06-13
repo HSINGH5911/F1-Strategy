@@ -21,6 +21,7 @@ def perform_stop(driver, track, new_compound, race_state):
     # count this completed pit stop
     driver.pit_stops += 1
     driver.laps_since_last_pit = 0
+    driver.tire_distance = 0
 
 def pit_error():
     if random.random() < .01:
