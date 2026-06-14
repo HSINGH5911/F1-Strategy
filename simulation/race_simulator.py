@@ -172,17 +172,17 @@ def get_field_strategy_state(drivers, track):
         }
     return state
 
-def process_pit_stops(drivers, track, race_state, skip_codes=None):
+def process_pit_stops(drivers, track, race_state, skip_codes = None):
     """Evaluate each driver's situation to determine if a pit stop should be performed based on 
         tire wear, race conditions, and strategic considerations such as undercut/overcut 
         opportunities, safety car presence, and proximity to optimal pit windows."""
     
+    if skip_codes is None:
+        skip_codes = set()
+
     total_laps = race_laps(track)
     current_lap = race_state.current_lap
     field_state = get_field_strategy_state(drivers, track)
-
-    if skip_codes is None:
-        skip_codes = set()
 
     for i, driver in enumerate(drivers):
         laps_remaining = race_state.laps_remaining
@@ -193,6 +193,44 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
         car_ahead = drivers[i - 1] if i > 0 else None
         car_behind = drivers[i + 1] if i < len(drivers) - 1 else None
 
+        pit_condition = laps_remaining > 5
+
+        # Pitting due to rain - applies to ALL drivers including player (mandatory safety)
+        wet = (
+            race_state.weather_state in ("WET", "INTERMEDIATE")
+            and driver.current_compound not in ("WET", "INTERMEDIATE")
+        )
+
+        if wet and pit_condition:
+            picked = pick_compound(laps_remaining, track, race_state)
+            # Safety check: only pit if changing compound
+            if picked != driver.current_compound:
+                perform_stop(
+                    driver,
+                    track,
+                    picked,
+                    race_state
+                )
+                serve_penalty(driver)
+                print(f"{driver.code} is pitting due to rain conditions! on lap {race_state.current_lap}")
+            continue
+        
+        # Free stop under safety car
+        if race_state.safety_car and driver.tire_distance > tire_data["max_distance"] * 0.8 and pit_condition:
+            if random.random() < 0.75:
+                perform_stop(
+                    driver,
+                    track,
+                    pick_compound(laps_remaining, track, race_state),
+                    race_state
+                )
+                serve_penalty(driver)
+                print(f"{driver.code} is taking a free stop under the safety car! on lap {race_state.current_lap}")
+                continue
+
+        if driver.code in skip_codes or driver.laps_since_last_pit < 15:
+            continue
+
         # How many drivers have already pitted in this stint
         drivers_ahead_pitted = sum(
             1 for d in drivers[:i]
@@ -200,7 +238,7 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
         )
 
         # If more than 3 drivers have pitted, pit noe
-        if drivers_ahead_pitted >= 3 and not has_completed_required_stops and laps_since_pit > 8:
+        if drivers_ahead_pitted >= 3 and not has_completed_required_stops and laps_since_pit > 8 and pit_condition:
             perform_stop(
                 driver, 
                 track,
@@ -209,28 +247,6 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
             ) 
             serve_penalty(driver)
             print(f"{driver.code} forced to react to field pitting! lap {race_state.current_lap}")
-            continue
-
-        # Pitting due to rain - applies to ALL drivers including player (mandatory safety)
-        wet = (
-            race_state.weather_state == "WET"
-            and driver.current_compound not in ("WET", "INTERMEDIATE")
-        )
-
-        if wet:
-            perform_stop(
-                driver,
-                track,
-                pick_compound(laps_remaining, track, race_state),
-                race_state
-            )
-            serve_penalty(driver)
-            print(f"{driver.code} is pitting due to rain conditions! on lap {race_state.current_lap}")
-            continue
-        
-        # skip drivers explicitly requested (e.g., player when using external strategy)
-        # but only for strategic decisions, not safety-critical ones (rain already handled above)
-        if driver.code in skip_codes:
             continue
         
         pit_stop_amount = get_num_rec_pit_stops(track, driver)
@@ -287,18 +303,19 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
 
         # Undercut -> We are faster than ahead car. Pit now and jump them
         # But only if we haven't already completed our required stops
-        if not has_completed_required_stops and car_ahead and laps_since_pit > 10 and near_window:
+        if not has_completed_required_stops and car_ahead and laps_since_pit > 10 and near_window and pit_condition:
             laps_before_rival = max(1, (tire_data["max_distance"] - car_ahead.tire_distance) // track["length_km"])
             if can_undercut(driver, car_ahead, track, race_state, laps_before_rival):
                     if random.random() < 0.65:
                         perform_stop(
                             driver,
                             track,
-                            "SOFT" if race_state.track_wetness < .2 else "INTERMEDIATE",
+                            pick_compound(laps_remaining, track, race_state),
                             race_state
                         )
                         serve_penalty(driver)
                         print(f"{driver.code} is pitting for an undercut! on lap {race_state.current_lap}")
+                        continue
            
         # Overcut -> Car behind is faster. Stay out and build gap
         if car_behind and laps_since_pit > 10 and near_window:
@@ -320,19 +337,6 @@ def process_pit_stops(drivers, track, race_state, skip_codes=None):
                 )
                 serve_penalty(driver)
                 print(f"{driver.code} is mirroring a pit stop! on lap {race_state.current_lap}")
-                continue
-
-        # Free stop under safety car
-        if race_state.safety_car and driver.tire_distance > tire_data["max_distance"] * 0.8:
-            if random.random() < 0.75:
-                perform_stop(
-                    driver,
-                    track,
-                    pick_compound(laps_remaining, track, race_state),
-                    race_state
-                )
-                serve_penalty(driver)
-                print(f"{driver.code} is taking a free stop under the safety car! on lap {race_state.current_lap}")
                 continue
 
         # Forcing pit stop for those who havent stopped yet and we are well past the final pit window
@@ -360,7 +364,8 @@ def pick_compound(laps_left, track, race_state):
 
     if race_state.track_wetness >= 0.6:
         return "WET"
-    elif race_state.track_wetness < 0.6 and race_state.track_wetness >= 0.2:
+    elif race_state.track_wetness >= 0.2:
+        # Only pit FOR intermediates if we're on a dry compound, not if we're already on inters
         return "INTERMEDIATE"
 
     if distance_left <= TIRES["SOFT"]["max_distance"]:
@@ -411,6 +416,8 @@ def simulate_race(drivers, track, race_state, history=None):
     race_state.laps_remaining = total_laps - race_state.current_lap + 1
 
     while race_state.current_lap <= total_laps:
+        update_weather(race_state)
+
         simulate_lap(drivers, track, race_state, total_laps)
 
         update_positions(drivers)
@@ -418,8 +425,6 @@ def simulate_race(drivers, track, race_state, history=None):
         process_overtakes(drivers, track)
 
         process_pit_stops(drivers, track, race_state)
-
-        update_weather(race_state)
 
         record_history(history, race_state, drivers)
 

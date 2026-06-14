@@ -1,5 +1,6 @@
 TRACKS = {
     "Australia": {
+        "name": "Albert Park",
         "length_km": 5.278,
         "base_lap_time": 82.0,
         "pit_delta": 21.0,
@@ -7,7 +8,6 @@ TRACKS = {
         "safety_car_chance": 0.65,
         "overtaking_difficulty": 0.60,
         "drs_effect": 0.55,
-
         "track_evolution": 0.70,
         "abrasion": 0.90,
         "downforce_level": "MEDIUM",
@@ -16,11 +16,13 @@ TRACKS = {
         "virtual_sc_chance": 0.22,
         "drs_zones": 4,
         "avg_temp": 24,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": -37.8497,
+        "longitude": 144.9680
     },
 
     "China": {
+        "name": "Shanghai International Circuit",
         "length_km": 5.451,
         "base_lap_time": 96.0,
         "pit_delta": 23.0,
@@ -28,7 +30,6 @@ TRACKS = {
         "safety_car_chance": 0.45,
         "overtaking_difficulty": 0.45,
         "drs_effect": 0.75,
-
         "track_evolution": 0.55,
         "abrasion": 1.00,
         "downforce_level": "MEDIUM",
@@ -37,11 +38,13 @@ TRACKS = {
         "virtual_sc_chance": 0.16,
         "drs_zones": 2,
         "avg_temp": 21,
-
-        "reccommended_pit_stops": 1.5
+        "reccommended_pit_stops": 1.5,
+        "latitude": 31.3389,
+        "longitude": 121.2200
     },
 
     "Japan": {
+        "name": "Suzuka Circuit",
         "length_km": 5.807,
         "base_lap_time": 91.0,
         "pit_delta": 22.0,
@@ -49,7 +52,6 @@ TRACKS = {
         "safety_car_chance": 0.30,
         "overtaking_difficulty": 0.75,
         "drs_effect": 0.40,
-
         "track_evolution": 0.45,
         "abrasion": 1.15,
         "downforce_level": "HIGH",
@@ -58,11 +60,13 @@ TRACKS = {
         "virtual_sc_chance": 0.12,
         "drs_zones": 1,
         "avg_temp": 18,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 34.8431,
+        "longitude": 136.5410
     },
 
     "Bahrain": {
+        "name": "Bahrain International Circuit",
         "length_km": 5.412,
         "base_lap_time": 96.0,
         "pit_delta": 22.5,
@@ -70,7 +74,6 @@ TRACKS = {
         "safety_car_chance": 0.45,
         "overtaking_difficulty": 0.35,
         "drs_effect": 0.75,
-
         "track_evolution": 0.80,
         "abrasion": 1.35,
         "downforce_level": "MEDIUM",
@@ -79,11 +82,13 @@ TRACKS = {
         "virtual_sc_chance": 0.18,
         "drs_zones": 3,
         "avg_temp": 31,
-
-        "reccommended_pit_stops": 2
+        "reccommended_pit_stops": 2,
+        "latitude": 26.0325,
+        "longitude": 50.5106
     },
 
     "Saudi Arabia": {
+        "name": "Jeddah Corniche Circuit",
         "length_km": 6.174,
         "base_lap_time": 89.0,
         "pit_delta": 18.5,
@@ -91,7 +96,6 @@ TRACKS = {
         "safety_car_chance": 0.85,
         "overtaking_difficulty": 0.55,
         "drs_effect": 0.70,
-
         "track_evolution": 0.65,
         "abrasion": 0.70,
         "downforce_level": "LOW",
@@ -100,11 +104,13 @@ TRACKS = {
         "virtual_sc_chance": 0.40,
         "drs_zones": 3,
         "avg_temp": 29,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 21.6319,
+        "longitude": 39.1044
     },
 
     "Miami": {
+        "name": "Miami International Autodrome",
         "length_km": 5.412,
         "base_lap_time": 89.0,
         "pit_delta": 20.5,
@@ -112,7 +118,6 @@ TRACKS = {
         "safety_car_chance": 0.55,
         "overtaking_difficulty": 0.45,
         "drs_effect": 0.65,
-
         "track_evolution": 0.75,
         "abrasion": 0.95,
         "downforce_level": "MEDIUM",
@@ -121,11 +126,13 @@ TRACKS = {
         "virtual_sc_chance": 0.20,
         "drs_zones": 3,
         "avg_temp": 30,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 25.9581,
+        "longitude": -80.2389
     },
 
     "Emilia Romagna": {
+        "name": "Autodromo Enzo e Dino Ferrari",
         "length_km": 4.909,
         "base_lap_time": 80.0,
         "pit_delta": 27.0,
@@ -133,7 +140,6 @@ TRACKS = {
         "safety_car_chance": 0.35,
         "overtaking_difficulty": 0.80,
         "drs_effect": 0.35,
-
         "track_evolution": 0.40,
         "abrasion": 1.05,
         "downforce_level": "HIGH",
@@ -142,11 +148,13 @@ TRACKS = {
         "virtual_sc_chance": 0.14,
         "drs_zones": 1,
         "avg_temp": 22,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 44.3439,
+        "longitude": 11.7167
     },
 
     "Monaco": {
+        "name": "Circuit de Monaco",
         "length_km": 3.337,
         "base_lap_time": 74.0,
         "pit_delta": 19.5,
@@ -154,7 +162,6 @@ TRACKS = {
         "safety_car_chance": 0.75,
         "overtaking_difficulty": 0.95,
         "drs_effect": 0.15,
-
         "track_evolution": 0.95,
         "abrasion": 0.75,
         "downforce_level": "VERY_HIGH",
@@ -163,12 +170,13 @@ TRACKS = {
         "virtual_sc_chance": 0.45,
         "drs_zones": 1,
         "avg_temp": 23,
-
-        "reccommended_pit_stops": 2
+        "reccommended_pit_stops": 2,
+        "latitude": 43.7347,
+        "longitude": 7.4206
     },
 
-
     "Spain": {
+        "name": "Circuit de Barcelona-Catalunya",
         "length_km": 4.657,
         "base_lap_time": 79.0,
         "pit_delta": 22.0,
@@ -176,7 +184,6 @@ TRACKS = {
         "safety_car_chance": 0.25,
         "overtaking_difficulty": 0.55,
         "drs_effect": 0.45,
-
         "track_evolution": 0.45,
         "abrasion": 1.25,
         "downforce_level": "HIGH",
@@ -185,11 +192,13 @@ TRACKS = {
         "virtual_sc_chance": 0.10,
         "drs_zones": 2,
         "avg_temp": 28,
-
-        "reccommended_pit_stops": 2
+        "reccommended_pit_stops": 2,
+        "latitude": 41.5700,
+        "longitude": 2.2611
     },
 
     "Canada": {
+        "name": "Circuit Gilles Villeneuve",
         "length_km": 4.361,
         "base_lap_time": 73.0,
         "pit_delta": 18.5,
@@ -197,7 +206,6 @@ TRACKS = {
         "safety_car_chance": 0.80,
         "overtaking_difficulty": 0.40,
         "drs_effect": 0.75,
-
         "track_evolution": 0.85,
         "abrasion": 0.80,
         "downforce_level": "LOW",
@@ -206,11 +214,13 @@ TRACKS = {
         "virtual_sc_chance": 0.32,
         "drs_zones": 3,
         "avg_temp": 22,
-
-        "reccommended_pit_stops": 1.5
+        "reccommended_pit_stops": 1.5,
+        "latitude": 45.5006,
+        "longitude": -73.5228
     },
 
     "Austria": {
+        "name": "Red Bull Ring",
         "length_km": 4.318,
         "base_lap_time": 66.0,
         "pit_delta": 19.5,
@@ -218,7 +228,6 @@ TRACKS = {
         "safety_car_chance": 0.35,
         "overtaking_difficulty": 0.35,
         "drs_effect": 0.80,
-
         "track_evolution": 0.55,
         "abrasion": 0.95,
         "downforce_level": "MEDIUM",
@@ -227,11 +236,13 @@ TRACKS = {
         "virtual_sc_chance": 0.14,
         "drs_zones": 3,
         "avg_temp": 24,
-
-        "reccommended_pit_stops": 2
+        "reccommended_pit_stops": 2,
+        "latitude": 47.2197,
+        "longitude": 14.7647
     },
 
     "Great Britain": {
+        "name": "Silverstone Circuit",
         "length_km": 5.891,
         "base_lap_time": 89.0,
         "pit_delta": 20.5,
@@ -239,7 +250,6 @@ TRACKS = {
         "safety_car_chance": 0.40,
         "overtaking_difficulty": 0.50,
         "drs_effect": 0.50,
-
         "track_evolution": 0.40,
         "abrasion": 1.30,
         "downforce_level": "HIGH",
@@ -248,11 +258,13 @@ TRACKS = {
         "virtual_sc_chance": 0.18,
         "drs_zones": 2,
         "avg_temp": 20,
-
-        "reccommended_pit_stops": 1.5
+        "reccommended_pit_stops": 1.5,
+        "latitude": 52.0786,
+        "longitude": -1.0169
     },
 
     "Belgium": {
+        "name": "Circuit de Spa-Francorchamps",
         "length_km": 7.004,
         "base_lap_time": 105.0,
         "pit_delta": 20.0,
@@ -260,7 +272,6 @@ TRACKS = {
         "safety_car_chance": 0.60,
         "overtaking_difficulty": 0.45,
         "drs_effect": 0.80,
-
         "track_evolution": 0.60,
         "abrasion": 1.05,
         "downforce_level": "MEDIUM_HIGH",
@@ -269,11 +280,13 @@ TRACKS = {
         "virtual_sc_chance": 0.24,
         "drs_zones": 2,
         "avg_temp": 19,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 50.4372,
+        "longitude": 5.9714
     },
 
     "Hungary": {
+        "name": "Hungaroring",
         "length_km": 4.381,
         "base_lap_time": 79.0,
         "pit_delta": 20.5,
@@ -281,7 +294,6 @@ TRACKS = {
         "safety_car_chance": 0.55,
         "overtaking_difficulty": 0.90,
         "drs_effect": 0.30,
-
         "track_evolution": 0.90,
         "abrasion": 1.10,
         "downforce_level": "HIGH",
@@ -290,11 +302,13 @@ TRACKS = {
         "virtual_sc_chance": 0.20,
         "drs_zones": 2,
         "avg_temp": 29,
-
-        "reccommended_pit_stops": 2
+        "reccommended_pit_stops": 2,
+        "latitude": 47.5789,
+        "longitude": 19.2486
     },
 
     "Netherlands": {
+        "name": "Circuit Zandvoort",
         "length_km": 4.259,
         "base_lap_time": 72.0,
         "pit_delta": 20.5,
@@ -302,7 +316,6 @@ TRACKS = {
         "safety_car_chance": 0.45,
         "overtaking_difficulty": 0.85,
         "drs_effect": 0.35,
-
         "track_evolution": 0.50,
         "abrasion": 1.15,
         "downforce_level": "HIGH",
@@ -311,11 +324,13 @@ TRACKS = {
         "virtual_sc_chance": 0.15,
         "drs_zones": 2,
         "avg_temp": 21,
-
-        "reccommended_pit_stops": 1.5
+        "reccommended_pit_stops": 1.5,
+        "latitude": 52.3888,
+        "longitude": 4.5409
     },
 
     "Italy": {
+        "name": "Autodromo Nazionale Monza",
         "length_km": 5.793,
         "base_lap_time": 81.0,
         "pit_delta": 24.0,
@@ -323,7 +338,6 @@ TRACKS = {
         "safety_car_chance": 0.35,
         "overtaking_difficulty": 0.30,
         "drs_effect": 0.90,
-
         "track_evolution": 0.35,
         "abrasion": 0.85,
         "downforce_level": "LOW",
@@ -332,11 +346,13 @@ TRACKS = {
         "virtual_sc_chance": 0.12,
         "drs_zones": 2,
         "avg_temp": 27,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 45.6156,
+        "longitude": 9.2811
     },
 
     "Azerbaijan": {
+        "name": "Baku City Circuit",
         "length_km": 6.003,
         "base_lap_time": 103.0,
         "pit_delta": 19.5,
@@ -344,7 +360,6 @@ TRACKS = {
         "safety_car_chance": 0.70,
         "overtaking_difficulty": 0.55,
         "drs_effect": 0.85,
-
         "track_evolution": 0.88,
         "abrasion": 0.70,
         "downforce_level": "LOW",
@@ -353,11 +368,13 @@ TRACKS = {
         "virtual_sc_chance": 0.35,
         "drs_zones": 2,
         "avg_temp": 26,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 40.3725,
+        "longitude": 49.8533
     },
 
     "Singapore": {
+        "name": "Marina Bay Street Circuit",
         "length_km": 4.940,
         "base_lap_time": 102.0,
         "pit_delta": 28.0,
@@ -365,7 +382,6 @@ TRACKS = {
         "safety_car_chance": 0.95,
         "overtaking_difficulty": 0.85,
         "drs_effect": 0.25,
-
         "track_evolution": 0.92,
         "abrasion": 1.20,
         "downforce_level": "VERY_HIGH",
@@ -374,11 +390,13 @@ TRACKS = {
         "virtual_sc_chance": 0.50,
         "drs_zones": 4,
         "avg_temp": 30,
-
-        "reccommended_pit_stops": 2
+        "reccommended_pit_stops": 2,
+        "latitude": 1.2914,
+        "longitude": 103.8640
     },
 
     "United States": {
+        "name": "Circuit of the Americas",
         "length_km": 5.513,
         "base_lap_time": 96.0,
         "pit_delta": 20.0,
@@ -386,7 +404,6 @@ TRACKS = {
         "safety_car_chance": 0.45,
         "overtaking_difficulty": 0.50,
         "drs_effect": 0.60,
-
         "track_evolution": 0.58,
         "abrasion": 1.10,
         "downforce_level": "MEDIUM_HIGH",
@@ -395,11 +412,13 @@ TRACKS = {
         "virtual_sc_chance": 0.18,
         "drs_zones": 2,
         "avg_temp": 27,
-
-        "reccommended_pit_stops": 1.5
+        "reccommended_pit_stops": 1.5,
+        "latitude": 30.1328,
+        "longitude": -97.6411
     },
 
     "Mexico": {
+        "name": "Autodromo Hermanos Rodriguez",
         "length_km": 4.304,
         "base_lap_time": 79.0,
         "pit_delta": 21.5,
@@ -407,7 +426,6 @@ TRACKS = {
         "safety_car_chance": 0.55,
         "overtaking_difficulty": 0.45,
         "drs_effect": 0.85,
-
         "track_evolution": 0.78,
         "abrasion": 0.85,
         "downforce_level": "HIGH",
@@ -416,11 +434,13 @@ TRACKS = {
         "virtual_sc_chance": 0.24,
         "drs_zones": 3,
         "avg_temp": 24,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 19.4042,
+        "longitude": -99.0907
     },
 
     "Brazil": {
+        "name": "Autodromo Jose Carlos Pace",
         "length_km": 4.309,
         "base_lap_time": 71.0,
         "pit_delta": 20.5,
@@ -428,7 +448,6 @@ TRACKS = {
         "safety_car_chance": 0.75,
         "overtaking_difficulty": 0.40,
         "drs_effect": 0.70,
-
         "track_evolution": 0.72,
         "abrasion": 1.00,
         "downforce_level": "MEDIUM",
@@ -437,11 +456,13 @@ TRACKS = {
         "virtual_sc_chance": 0.30,
         "drs_zones": 2,
         "avg_temp": 26,
-
-        "reccommended_pit_stops": 1.5
+        "reccommended_pit_stops": 1.5,
+        "latitude": -23.7036,
+        "longitude": -46.6997
     },
 
     "Las Vegas": {
+        "name": "Las Vegas Strip Circuit",
         "length_km": 6.201,
         "base_lap_time": 95.0,
         "pit_delta": 21.0,
@@ -449,7 +470,6 @@ TRACKS = {
         "safety_car_chance": 0.65,
         "overtaking_difficulty": 0.35,
         "drs_effect": 0.95,
-
         "track_evolution": 0.82,
         "abrasion": 0.60,
         "downforce_level": "LOW",
@@ -458,11 +478,13 @@ TRACKS = {
         "virtual_sc_chance": 0.28,
         "drs_zones": 2,
         "avg_temp": 17,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 36.1147,
+        "longitude": -115.1728
     },
 
     "Qatar": {
+        "name": "Lusail International Circuit",
         "length_km": 5.419,
         "base_lap_time": 84.0,
         "pit_delta": 22.5,
@@ -470,7 +492,6 @@ TRACKS = {
         "safety_car_chance": 0.30,
         "overtaking_difficulty": 0.55,
         "drs_effect": 0.55,
-
         "track_evolution": 0.52,
         "abrasion": 1.40,
         "downforce_level": "MEDIUM_HIGH",
@@ -479,11 +500,13 @@ TRACKS = {
         "virtual_sc_chance": 0.10,
         "drs_zones": 1,
         "avg_temp": 33,
-
-        "reccommended_pit_stops": 2
+        "reccommended_pit_stops": 2,
+        "latitude": 25.4900,
+        "longitude": 51.4536
     },
 
     "Abu Dhabi": {
+        "name": "Yas Marina Circuit",
         "length_km": 5.281,
         "base_lap_time": 88.0,
         "pit_delta": 21.0,
@@ -491,7 +514,6 @@ TRACKS = {
         "safety_car_chance": 0.25,
         "overtaking_difficulty": 0.50,
         "drs_effect": 0.65,
-
         "track_evolution": 0.68,
         "abrasion": 0.90,
         "downforce_level": "MEDIUM",
@@ -500,7 +522,8 @@ TRACKS = {
         "virtual_sc_chance": 0.12,
         "drs_zones": 2,
         "avg_temp": 29,
-
-        "reccommended_pit_stops": 1
+        "reccommended_pit_stops": 1,
+        "latitude": 24.4672,
+        "longitude": 54.6031
     }
 }

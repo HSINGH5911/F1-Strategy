@@ -20,6 +20,7 @@ from config.Tracks import TRACKS
 from config.Teams import TEAMS
 from config.Drivers import DRIVERS
 from config.Tires import TIRES
+from config.General import SIMULATION_RUNS
 from simulation.race_simulator import simulate_race, process_pit_stops, get_num_rec_pit_stops, get_pit_window
 
 from ui.dashboard import (
@@ -156,8 +157,8 @@ def simulate_race_with_strategy(drivers, track, race_state, history, plan: Strat
     player_driver = next((d for d in drivers if d.code == player_code), None)
     required_stops = track["reccommended_pit_stops"]
     
-
     while race_state.current_lap <= total_laps:
+        update_weather(race_state)
         simulate_lap(drivers, track, race_state, total_laps)
         update_positions(drivers)
         process_overtakes(drivers, track)
@@ -165,14 +166,21 @@ def simulate_race_with_strategy(drivers, track, race_state, history, plan: Strat
         # ── Pit stops ──────────────────────────────────────────
         # Player uses the StrategyPlan; AI drivers use the full pit logic
         if player_driver and plan.stops:
+            # Scheduled stop
             scheduled_compound = plan.next_stop_for_lap(race_state.current_lap)
-            if scheduled_compound:
+            if scheduled_compound and player_driver.laps_since_last_pit > 10:
                 perform_stop(player_driver, track, scheduled_compound, race_state)
 
-        # Process AI pit logic while skipping the player
-        process_pit_stops(drivers, track, race_state, skip_codes={player_driver.code} if player_driver else None)
+            # Emergency wet/dry swap regardless of plan
+            wet = race_state.track_wetness
+            current = player_driver.current_compound
+            if wet > 0.6 and current in ("SOFT", "MEDIUM", "HARD"):
+                compound = "WET" if wet > 0.85 else "INTERMEDIATE"
+                perform_stop(player_driver, track, compound, race_state)
+            elif wet < 0.2 and current in ("WET", "INTERMEDIATE"):
+                perform_stop(player_driver, track, "MEDIUM", race_state)
 
-        update_weather(race_state)
+        process_pit_stops(drivers, track, race_state, skip_codes={player_code})
         record_history(history, race_state, drivers)
         race_state.current_lap += 1
 
@@ -196,7 +204,7 @@ def run_console_simulation(track_name="Italy", player_code=None, plan: StrategyP
     }
 
     if plan and player_code:
-        simulate_race_with_strategy(drivers, track, race_state, history, plan, player_code)
+        (drivers, track, race_state, history, plan, player_code)
     else:
         simulate_race(drivers, track, race_state, history)
 
@@ -280,7 +288,6 @@ class StrategyGUI(tk.Tk):
         return frame
 
     # ── Setup panel ───────────────────────────
-
     def _build_setup_panel(self, parent):
         """Create the race setup section, allowing the user to select the track, player driver, 
             starting compound, and grid position."""
@@ -324,7 +331,6 @@ class StrategyGUI(tk.Tk):
         self.laps_label.grid(row=4, column=0, columnspan=2, sticky="w", pady=(4, 0))
 
     # ── Strategy panel ────────────────────────
-
     def _build_strategy_panel(self, parent):
         """Create the pit stop strategy section, allowing the user to plan their pit stops."""
 
@@ -370,6 +376,15 @@ class StrategyGUI(tk.Tk):
                                  cursor="hand2", font=("Helvetica", 12, "bold"),
                                  pady=10)
         self.run_btn.pack(fill="x", pady=(4, 0))
+
+        # Run Monte Carlo Button
+        self.monte_carlo = tk.Button(
+            parent, text="▶  Simulate x1000", command=self._run_monte_carlo_threaded,
+            bg="#e74c3c", fg="white", relief="flat",
+            cursor="hand2", font=("Helvetica", 12, "bold"),
+            pady=10)
+        self.monte_carlo.pack(fill="x", pady=(4, 0))
+        
 
         self.status_label = tk.Label(parent, text="", fg="#00d4ff",
                                      bg="#1a1a2e", font=("Helvetica", 9))
@@ -626,6 +641,90 @@ class StrategyGUI(tk.Tk):
         self.run_btn.config(state="disabled", text="Simulating…")
         self.status_label.config(text="")
         self._show_starting_grid()
+
+    def _run_monte_carlo(self, runs=1000):
+        """Run the simulation 1000x and get final results"""
+        
+        track_name = self.track_var.get()
+        player_code = self.driver_var.get()
+        track = TRACKS[track_name]
+        
+        position_counts = {code: [0] * 22 for code in DRIVERS}
+        win_counts = {code: 0 for code in DRIVERS}
+        podium_counts = {code: 0 for code in DRIVERS}
+        
+        for _ in range(runs):
+            drivers = create_grid()
+            race_state = RaceState()
+            
+            player_driver = next(d for d in drivers if d.code == player_code)
+            player_driver.current_compound = self.start_compound_var.get()
+            
+            history = {
+                "laps": [], "positions": {}, "lap_times": {},
+                "tire_distance": {}, "compounds": {}, "gaps": {}
+            }
+            
+            result = simulate_race_with_strategy(
+                drivers, track, race_state, history, self.plan, player_code
+            )
+            
+            sorted_drivers = sorted(result, key=lambda d: d.race_time)
+            for pos, driver in enumerate(sorted_drivers, start=1):
+                position_counts[driver.code][pos - 1] += 1
+                if pos == 1:
+                    win_counts[driver.code] += 1
+                if pos <= 3:
+                    podium_counts[driver.code] += 1
+        
+        self.after(0, lambda: self._show_monte_carlo_results(
+            position_counts, win_counts, podium_counts, runs, player_code
+        ))
+
+    def _show_monte_carlo_results(self, position_counts, win_counts, podium_counts, runs, player_code):
+        win = tk.Toplevel(self)
+        win.title("Monte Carlo Results")
+        win.configure(bg="#1a1a2e")
+        win.geometry("600x500")
+
+        tk.Label(
+            win,
+            text=f"Monte Carlo - {runs} simulation",
+            font=("Helvetica", 14, "bold"),
+            fg="white",
+            bg="#1a1a2e",
+        ).pack(pady=(16, 4))
+
+        cols = ("Driver", "Win %", "Podium %", "Most Likely Pos")
+        tree = ttk.Treeview(win, columns=cols, show="headings", height=20)
+
+        for col in cols:
+            tree.heading(col, text=col)
+            tree.column(col, width=130, anchor="center")
+        
+        tree.tag_configure("player", foreground="#00d4ff", font=("Helvetica", 10, "bold"))
+
+        sorted_codes = sorted(DRIVERS.keys(), key=lambda c: win_counts[c], reverse=True)
+        for code in sorted_codes:
+           win_pct = win_counts[code] / runs * 100
+           podium_pct = podium_counts[code] / runs * 100
+           most_likely = position_counts[code].index(max(position_counts[code])) + 1
+           tags = ("player",) if code == player_code else ()
+           tree.insert("", "end", values=(
+               code,
+               f"{win_pct:.1f}%",
+               f"{podium_pct:.1f}%",
+               f"P{most_likely}",
+           ), tags=tags) 
+
+        vsb = ttk.Scrollbar(win, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vsb.set)
+        vsb.pack(side="right", fill="y")
+        tree.pack(fill="both", expand=True, padx=16, pady=(0, 16))
+
+    def _run_monte_carlo_threaded(self):
+        self.run_btn.config(state="disabled")
+        threading.Thread(target=self._run_monte_carlo, daemon=True).start()
 
     def _show_starting_grid(self):
         """Show the starting grid window.  Drivers can be reordered by editing the position
