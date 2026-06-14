@@ -1,10 +1,11 @@
 import math
-
 import os
 import sys
 import tkinter as tk
 import random
 import threading
+import datetime
+import json
 
 from matplotlib import container
 
@@ -108,7 +109,6 @@ def race_laps(track):
 # ─────────────────────────────────────────────
 #  Strategy planner — applied before sim runs
 # ─────────────────────────────────────────────
-
 class StrategyPlan:
     """
     Holds a list of pit stops: [(lap, new_compound), ...]
@@ -142,7 +142,6 @@ class StrategyPlan:
 # ─────────────────────────────────────────────
 #  Patched simulate_race that respects a plan
 # ─────────────────────────────────────────────
-
 def simulate_race_with_strategy(drivers, track, race_state, history, plan: StrategyPlan, player_code: str):
     """
     Wraps simulate_race but intercepts pit stops for the player driver
@@ -190,7 +189,6 @@ def simulate_race_with_strategy(drivers, track, race_state, history, plan: Strat
 # ─────────────────────────────────────────────
 #  Console runner (kept for headless use)
 # ─────────────────────────────────────────────
-
 def run_console_simulation(track_name="Italy", player_code=None, plan: StrategyPlan = None):
     """Run a full race simulation in the console, optionally with a player driver and strategy plan."""
 
@@ -234,7 +232,6 @@ COMPOUND_SHORT = {
     "INTERMEDIATE": "I", "WET": "W",
 }
 
-
 class StrategyGUI(tk.Tk):
     def __init__(self):
         """Initialize the main application window, set up the title, size, and background color."""
@@ -243,7 +240,7 @@ class StrategyGUI(tk.Tk):
         self.title("F1 Race Strategy Planner")
         self.resizable(True, True)
         self.configure(bg="#1a1a2e")
-        self.geometry("1100x720")
+        self.geometry("1400x900")
 
         self.plan = StrategyPlan()
         self._stop_rows: list[dict] = []   # tracks widgets per stop row
@@ -267,7 +264,7 @@ class StrategyGUI(tk.Tk):
         main = tk.Frame(self, bg="#1a1a2e")
         main.pack(fill="both", expand=True, padx=12, pady=10)
 
-        left = tk.Frame(main, bg="#1a1a2e", width=340)
+        left = tk.Frame(main, bg="#1a1a2e", width=420)
         left.pack(side="left", fill="y", padx=(0, 10))
         left.pack_propagate(False)
 
@@ -275,6 +272,7 @@ class StrategyGUI(tk.Tk):
         right.pack(side="left", fill="both", expand=True)
 
         self._build_setup_panel(left)
+        self.build_weather_panel(left)
         self._build_strategy_panel(left)
         self._build_results_panel(right)
 
@@ -329,6 +327,99 @@ class StrategyGUI(tk.Tk):
         # Lap count display
         self.laps_label = tk.Label(f, text="", fg="#00d4ff", bg="#16213e", font=("Helvetica", 9))
         self.laps_label.grid(row=4, column=0, columnspan=2, sticky="w", pady=(4, 0))
+
+    
+    def build_weather_panel(self, parent):
+        """Fetch and display real historical weather for the selected track and a user-specified date."""
+
+        f = self._section(parent, "Track Weather")
+
+        # Date entry
+        tk.Label(f, text="Race date (YYYY-MM-DD)", fg="#aaaaaa", bg="#16213e",
+                font=("Helvetica", 9)).grid(row=0, column=0, sticky="w", pady=2)
+        self.weather_date_var = tk.StringVar(value=datetime.date.today().strftime("%Y-%m-%d"))
+        tk.Entry(f, textvariable=self.weather_date_var, width=14,
+                bg="#0d0d1a", fg="white", insertbackground="white",
+                relief="flat").grid(row=0, column=1, padx=(8, 0), pady=2)
+
+        tk.Button(f, text="Fetch Weather", command=self._fetch_weather,
+                bg="#0f3460", fg="white", relief="flat", cursor="hand2",
+                font=("Helvetica", 9), padx=8, pady=3).grid(
+                    row=1, column=0, columnspan=2, sticky="w", pady=(6, 4))
+
+        # Result labels
+        self.weather_labels = {}
+        fields = ["Date", "High", "Low", "Humidity", "Rainfall", "Condition", "Location"]
+        for i, field in enumerate(fields):
+            tk.Label(f, text=f"{field}:", fg="#666666", bg="#16213e",
+                    font=("Helvetica", 9)).grid(row=i + 2, column=0, sticky="w", pady=1)
+            lbl = tk.Label(f, text="—", fg="#00d4ff", bg="#16213e",
+                        font=("Helvetica", 9, "bold"))
+            lbl.grid(row=i + 2, column=1, sticky="w", padx=(8, 0), pady=1)
+            self.weather_labels[field] = lbl
+
+    def _fetch_weather(self):
+        """Fetch weather data from Open-Meteo for the selected track and date."""
+
+        track_name = self.track_var.get()
+        track = TRACKS[track_name]
+
+        lat = track.get("latitude")
+        lon = track.get("longitude")
+        date = self.weather_date_var.get().strip()
+
+        if not lat or not lon:
+            self.weather_labels["Condition"].config(text="No coords for track", fg="#e74c3c")
+            return
+
+        def fetch():
+            try:
+                import requests
+                params = {
+                    "latitude": lat,
+                    "longitude": lon,
+                    "start_date": date,
+                    "end_date": date,
+                    "daily": "temperature_2m_max,temperature_2m_min,precipitation_sum",
+                    "hourly": "relative_humidity_2m",
+                    "timezone": "auto",
+                    "temperature_unit": "fahrenheit",
+                    "precipitation_unit": "mm"
+                }
+                data = requests.get(
+                    "https://archive-api.open-meteo.com/v1/archive",
+                    params=params
+                ).json()
+
+                location = track.get("name", track_name)
+
+                high = data["daily"]["temperature_2m_max"][0]
+                low = data["daily"]["temperature_2m_min"][0]
+                rain = data["daily"]["precipitation_sum"][0]
+                humidity = data["hourly"]["relative_humidity_2m"]
+                avg_humidity = sum(humidity) / len(humidity)
+                condition = "WET" if rain > 0 else "DRY"
+                condition_color = "#3498db" if condition == "WET" else "#f39c12"
+
+                self.after(0, lambda: self._update_weather_labels(
+                    date, high, low, avg_humidity, rain, condition, condition_color, location
+                ))
+
+            except Exception as e:
+                self.after(0, lambda: self.weather_labels["Condition"].config(
+                    text=f"Error: {e}", fg="#e74c3c"
+                ))
+
+        threading.Thread(target=fetch, daemon=True).start()
+
+    def _update_weather_labels(self, date, high, low, humidity, rain, condition, condition_color, location):
+        self.weather_labels["Date"].config(text=date)
+        self.weather_labels["High"].config(text=f"{high:.1f}°F")
+        self.weather_labels["Low"].config(text=f"{low:.1f}°F")
+        self.weather_labels["Humidity"].config(text=f"{humidity:.1f}%")
+        self.weather_labels["Rainfall"].config(text=f"{rain:.1f} mm")
+        self.weather_labels["Condition"].config(text=condition, fg=condition_color)
+        self.weather_labels["Location"].config(text=location)
 
     # ── Strategy panel ────────────────────────
     def _build_strategy_panel(self, parent):
@@ -635,6 +726,24 @@ class StrategyGUI(tk.Tk):
             err = traceback.format_exc()
             self.after(0, lambda: self._show_error(err))
 
+    def _save_grid(self, grid_order: list):
+        """Save the grid order to a file."""
+        path = os.path.join(os.path.dirname(__file__), "saved_grid.json")
+        with open(path, "w") as f:
+            json.dump({
+                "track": self.track_var.get(),
+                "grid_order": grid_order
+            }, f)
+
+    def _load_grid(self):
+        """Load the saved grid order from file, returns None if not found."""
+        path = os.path.join(os.path.dirname(__file__), "saved_grid.json")
+        try:
+            with open(path) as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return None
+        
     def _run_threaded(self):
         """Start the simulation in a separate thread to keep the UI responsive."""
 
@@ -642,41 +751,50 @@ class StrategyGUI(tk.Tk):
         self.status_label.config(text="")
         self._show_starting_grid()
 
-    def _run_monte_carlo(self, runs=1000):
-        """Run the simulation 1000x and get final results"""
-        
+    def _run_monte_carlo(self, runs=1000, grid_order: list = None):
         track_name = self.track_var.get()
         player_code = self.driver_var.get()
         track = TRACKS[track_name]
-        
-        position_counts = {code: [0] * 22 for code in DRIVERS}
-        win_counts = {code: 0 for code in DRIVERS}
-        podium_counts = {code: 0 for code in DRIVERS}
-        
+
+        all_codes = [d.code for d in create_grid()]
+        position_counts = {code: [0] * len(all_codes) for code in all_codes}
+        win_counts = {code: 0 for code in all_codes}
+        podium_counts = {code: 0 for code in all_codes}
+
         for _ in range(runs):
             drivers = create_grid()
             race_state = RaceState()
-            
+
+            if grid_order is not None:
+                code_to_pos = {code: idx for idx, code in enumerate(grid_order)}
+                drivers.sort(key=lambda d: code_to_pos.get(d.code, 99))
+
+            for i, driver in enumerate(drivers, start=1):
+                driver.position = i
+                driver.race_time += (i - 1) * 0.5
+
             player_driver = next(d for d in drivers if d.code == player_code)
             player_driver.current_compound = self.start_compound_var.get()
-            
+
             history = {
                 "laps": [], "positions": {}, "lap_times": {},
                 "tire_distance": {}, "compounds": {}, "gaps": {}
             }
-            
+
             result = simulate_race_with_strategy(
                 drivers, track, race_state, history, self.plan, player_code
             )
-            
+
             sorted_drivers = sorted(result, key=lambda d: d.race_time)
             for pos, driver in enumerate(sorted_drivers, start=1):
-                position_counts[driver.code][pos - 1] += 1
-                if pos == 1:
+                if driver.code in position_counts:
+                    position_counts[driver.code][pos - 1] += 1
+                if pos == 1 and driver.code in win_counts:
                     win_counts[driver.code] += 1
-                if pos <= 3:
+                if pos <= 3 and driver.code in podium_counts:
                     podium_counts[driver.code] += 1
-        
+
+        self.after(0, lambda: self.monte_carlo.config(state="normal", text="▶  Simulate x1000"))
         self.after(0, lambda: self._show_monte_carlo_results(
             position_counts, win_counts, podium_counts, runs, player_code
         ))
@@ -723,8 +841,145 @@ class StrategyGUI(tk.Tk):
         tree.pack(fill="both", expand=True, padx=16, pady=(0, 16))
 
     def _run_monte_carlo_threaded(self):
-        self.run_btn.config(state="disabled")
-        threading.Thread(target=self._run_monte_carlo, daemon=True).start()
+        self.monte_carlo.config(state="disabled", text="Simulating…")
+        self._show_monte_carlo_grid()
+
+    def _show_monte_carlo_grid(self):
+        """Show the starting grid window before running Monte Carlo."""
+        
+        track_name = self.track_var.get()
+        player_code = self.driver_var.get()
+        grid_pos = int(self.grid_pos_var.get())
+
+        drivers = create_grid()
+        sorted_codes = [d.code for d in drivers]
+        if player_code in sorted_codes:
+            sorted_codes.remove(player_code)
+            sorted_codes.insert(grid_pos - 1, player_code)
+        sorted_drivers = sorted(
+            drivers,
+            key=lambda d: sorted_codes.index(d.code) if d.code in sorted_codes else 99
+        )
+
+        # Reuse the same grid window as the single race
+        win = tk.Toplevel(self)
+        win.title("Starting Grid — Monte Carlo")
+        win.configure(bg="#1a1a2e")
+        win.geometry("560x620")
+        win.resizable(False, False)
+        win.grab_set()
+
+        tk.Label(win, text=f"Starting Grid — {track_name}",
+                font=("Helvetica", 14, "bold"), fg="white", bg="#1a1a2e").pack(pady=(16, 2))
+        tk.Label(win, text="Set the grid, then run 1000 simulations from this position.",
+                font=("Helvetica", 8), fg="#555577", bg="#1a1a2e").pack(pady=(0, 8))
+
+        outer = tk.Frame(win, bg="#1a1a2e")
+        outer.pack(fill="both", expand=True, padx=20)
+
+        canvas = tk.Canvas(outer, bg="#1a1a2e", highlightthickness=0)
+        vsb = ttk.Scrollbar(outer, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=vsb.set)
+        vsb.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+
+        frame = tk.Frame(canvas, bg="#1a1a2e")
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+        frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        pos_vars = []
+    
+        def _build_rows(driver_list):
+            for widget in frame.winfo_children():
+                widget.destroy()
+            for col_idx, col in enumerate(["POS", "DRIVER", "TEAM", "COMPOUND"]):
+                tk.Label(frame, text=col, fg="#555555", bg="#1a1a2e",
+                        font=("Helvetica", 8, "bold")).grid(
+                            row=0, column=col_idx, sticky="w", padx=(0, 20), pady=(0, 6))
+            pos_vars.clear()
+            for i, driver in enumerate(driver_list):
+                r = i + 1
+                is_player = driver.code == player_code
+                fg = "#00d4ff" if is_player else ("#f1c40f" if i < 3 else "#cccccc")
+                bg_row = "#16213e" if i % 2 == 0 else "#1a1a2e"
+
+                pos_var = tk.IntVar(value=i + 1)
+                pos_vars.append((pos_var, driver.code))
+
+                ttk.Spinbox(frame, from_=1, to=len(driver_list),
+                            textvariable=pos_var, width=4).grid(
+                                row=r, column=0, sticky="w", padx=(0, 20), pady=1)
+                tk.Label(frame, text=driver.code, fg=fg, bg=bg_row,
+                        font=("Helvetica", 9, "bold" if is_player else "normal")).grid(
+                            row=r, column=1, sticky="w", padx=(0, 20), pady=1)
+                tk.Label(frame, text=driver.team.name[:18], fg="#888888", bg=bg_row,
+                        font=("Helvetica", 9)).grid(
+                            row=r, column=2, sticky="w", padx=(0, 20), pady=1)
+                comp = driver.current_compound
+                marker = "  ◀ YOU" if is_player else ""
+                tk.Label(frame, text=f"● {comp}{marker}",
+                        fg="#00d4ff" if is_player else COMPOUND_COLORS.get(comp, "#888888"),
+                        bg=bg_row, font=("Helvetica", 9)).grid(
+                            row=r, column=3, sticky="w", pady=1)
+                
+        saved = self._load_grid()
+        if saved and saved.get("track") == track_name:
+            def load_saved():
+                saved_order = saved["grid_order"]
+                code_to_driver = {d.code: d for d in sorted_drivers}
+                new_order = [code_to_driver[c] for c in saved_order if c in code_to_driver]
+                sorted_drivers[:] = new_order
+                _build_rows(sorted_drivers)
+
+            tk.Button(win, text="↩  Load Saved Grid", command=load_saved,
+                    bg="#2c2c3e", fg="#aaaaaa", relief="flat", cursor="hand2",
+                    font=("Helvetica", 10), padx=12, pady=6).pack(
+                        fill="x", padx=20, pady=(0, 2))
+            
+        _build_rows(sorted_drivers)
+
+        def apply_order():
+            order = []
+            for idx, (pv, code) in enumerate(pos_vars):
+                try:
+                    p = int(pv.get())
+                except (ValueError, tk.TclError):
+                    p = idx + 1
+                order.append((p, idx, code))
+            order.sort(key=lambda x: (x[0], x[1]))
+            code_to_driver = {d.code: d for d in sorted_drivers}
+            sorted_drivers[:] = [code_to_driver[code] for _, _, code in order]
+            _build_rows(sorted_drivers)
+
+        tk.Button(win, text="↕  Apply Order", command=apply_order,
+                bg="#0f3460", fg="white", relief="flat", cursor="hand2",
+                font=("Helvetica", 10, "bold"), padx=12, pady=6).pack(
+                    fill="x", padx=20, pady=(6, 2))
+
+        btn_frame = tk.Frame(win, bg="#1a1a2e")
+        btn_frame.pack(fill="x", padx=20, pady=(4, 16))
+
+        def start():
+            final_order = [d.code for d in sorted_drivers]
+            self._save_grid(final_order)
+            win.destroy()
+            self.status_label.config(text="Running Monte Carlo…")
+            threading.Thread(
+                target=self._run_monte_carlo,
+                kwargs={"grid_order": final_order},
+                daemon=True,
+            ).start()
+
+        def cancel():
+            win.destroy()
+            self.monte_carlo.config(state="normal", text="▶  Simulate x1000")
+
+        tk.Button(btn_frame, text="▶  Run x1000", command=start,
+                bg="#e74c3c", fg="white", relief="flat", cursor="hand2",
+                font=("Helvetica", 11, "bold"), padx=16, pady=8).pack(side="left")
+        tk.Button(btn_frame, text="Cancel", command=cancel,
+                bg="#2c2c3e", fg="#aaaaaa", relief="flat", cursor="hand2",
+                font=("Helvetica", 10), padx=12, pady=8).pack(side="left", padx=(10, 0))
 
     def _show_starting_grid(self):
         """Show the starting grid window.  Drivers can be reordered by editing the position
@@ -776,7 +1031,7 @@ class StrategyGUI(tk.Tk):
 
         frame = tk.Frame(canvas, bg="#1a1a2e")
         frame_id = canvas.create_window((0, 0), window=frame, anchor="nw")
-
+            
         def _on_configure(e):
             canvas.configure(scrollregion=canvas.bbox("all"))
         frame.bind("<Configure>", _on_configure)
@@ -835,6 +1090,20 @@ class StrategyGUI(tk.Tk):
                          font=("Helvetica", 9)).grid(
                              row=r, column=3, sticky="w", pady=1)
 
+        saved = self._load_grid()
+        if saved and saved.get("track") == track_name:
+            def load_saved():
+                saved_order = saved["grid_order"]
+                code_to_driver = {d.code: d for d in sorted_drivers}
+                new_order = [code_to_driver[c] for c in saved_order if c in code_to_driver]
+                sorted_drivers[:] = new_order
+                _build_rows(sorted_drivers)
+
+            tk.Button(win, text="↩  Load Saved Grid", command=load_saved,
+                    bg="#2c2c3e", fg="#aaaaaa", relief="flat", cursor="hand2",
+                    font=("Helvetica", 10), padx=12, pady=6).pack(
+                        fill="x", padx=20, pady=(0, 2))
+
         _build_rows(sorted_drivers)
 
         # ── Apply Order button ───────────────────────────────────
@@ -870,6 +1139,7 @@ class StrategyGUI(tk.Tk):
         def start():
             # Capture the final ordered list of codes to pass to the simulation
             final_order = [d.code for d in sorted_drivers]
+            self._save_grid(final_order)
             win.destroy()
             self.status_label.config(text="Running simulation…")
             threading.Thread(

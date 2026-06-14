@@ -182,7 +182,7 @@ TRACKS = {
         "pit_delta": 22.0,
         "tire_stress": 0.85,
         "safety_car_chance": 0.25,
-        "overtaking_difficulty": 0.55,
+        "overtaking_difficulty": 0.75,
         "drs_effect": 0.45,
         "track_evolution": 0.45,
         "abrasion": 1.25,

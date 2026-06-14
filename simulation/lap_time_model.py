@@ -21,7 +21,10 @@ def calc_lap_time(driver, track, race_state):
     lap_time += random.uniform(-variance, variance)
 
     if driver.position > 10:
-        lap_time += (1.0 - driver.racecraft) * 1.5
+        # Racecraft helps reduce backmarker penalty, but it shouldn't eliminate it
+        # Cap the bonus so even top drivers lose some time when far behind
+        racecraft_bonus = min(0.5, (driver.racecraft - 0.75) * 2.0)
+        lap_time += max(0.15, (1.0 - driver.racecraft) * 1.5 - racecraft_bonus)
 
     lap_time += tire_performance_curve(driver)
     lap_time += weather_pace_penalty(race_state.track_wetness)
@@ -40,6 +43,10 @@ def calc_lap_time(driver, track, race_state):
 
     if driver.tire_distance < 3:
         lap_time += (3 - driver.tire_distance) * 0.4
+
+    if driver.position > 10:
+        cars_ahead = driver.position - 1
+        lap_time += cars_ahead * .02
 
     return lap_time
 

@@ -14,7 +14,10 @@ def overtake_probability(attacker, defender):
     
     delta = pace_delta(attacker, defender)
 
-    return max(0.01, min(delta * 0.5, 0.9))
+    if delta <= 0:
+        return 0.01
+
+    return max(0.01, min(delta * 0.04, 0.12))
 
 def drs_bonus(gap):
     """Calculate the DRS bonus for an overtake attempt based on the gap between the attacking and 
@@ -22,7 +25,7 @@ def drs_bonus(gap):
         is applied to the overtake probability."""
     
     if gap <= 1:
-        return 0.15
+        return 0.05
     return 0
 
 def overtake_modifier(track):
@@ -37,6 +40,9 @@ def attempt_overtake(attacker, defender, gap, track):
     """Determine whether an overtake attempt by the attacking driver on the defending driver is 
         successful. The function calculates the base overtake probability based on the pace 
         difference."""
+    
+    if attacker.laps_since_last_pit < 2:
+        return False
     
     chance = overtake_probability(attacker, defender)
     chance += drs_bonus(gap)
